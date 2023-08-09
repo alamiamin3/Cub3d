@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 09:49:09 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/08 19:46:16 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/09 22:46:57 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ void	draw_ray_line(t_mlx *mlx, double angle, double x1, double y1, int j)
 		step = fabs(dy);
 	x_inc = dx / step;
 	y_inc = dy / step;
-	while (i < step)
+	while (i < step && mlx->rays[j].dis < mlx->img.size)
 	{
 		my_mlx_pixel_put(mlx,x1, y1, 0xF93308);
 		x1 += x_inc;
@@ -241,8 +241,38 @@ int	draw_player(t_mlx *mlx)
 		}
 		y++;
 	}
-	// draw_line(mlx, mlx->player.rotat_angle, mlx->player.x + 1, mlx->player.y + 1);
+	draw_line(mlx, mlx->player.rotat_angle, mlx->player.x + 1, mlx->player.y + 1);
 	return (0);
+}
+
+double ft_mod(double x, double y) {
+
+    double div = x / y;
+    double rounded = round(div);  
+    double result = x - rounded * y;
+    return result + 0.000001;
+}
+void	normalize_ray(t_mlx *mlx, int i, double ray_angle)
+{
+	// mlx->rays[i].ray_angle = fmod(ray_angle, PI * 2);
+		// if (mlx->rays[i].ray_angle < 0 )
+		// 	mlx->rays[i].ray_angle = PI * 2 + mlx->rays[i].ray_angle;
+	    while (ray_angle < 0 && ray_angle >  -0.000001) {
+		printf("mode : %lf\n", ray_angle);
+        ray_angle += 2 * PI; // Add 2π to make it positive
+    }
+	// ray_angle = round(ray_angle);
+    while (ray_angle >= 2 * PI ) {
+        ray_angle -= 2 * M_PI; // Subtract 2π to bring it within range
+    }
+	mlx->rays[i].ray_angle  = ray_angle;
+	
+		printf("norm ray : %f\n", (mlx->rays[i].ray_angle * 180) / PI);
+	mlx->rays[i].f_d = mlx->rays[i].ray_angle > 0 && mlx->rays[i].ray_angle < PI ? 1 : 0;
+	mlx->rays[i].f_u = !mlx->rays[i].f_d;
+	mlx->rays[i].f_r = mlx->rays[i].ray_angle > 1.5 * PI || mlx->rays[i].ray_angle < PI / 2 ? 1 : 0;
+	mlx->rays[i].f_l = !mlx->rays[i].f_r;
+	// printf("u : %d , d : %d r : %d, l : %d\n", mlx->rays[i].f_u, mlx->rays[i].f_d, mlx->rays[i].f_r, mlx->rays[i].f_l);
 }
 void	cast_rays(t_mlx *mlx)
 {
@@ -251,14 +281,31 @@ void	cast_rays(t_mlx *mlx)
 
 	i = 0;
 	ray_angle = mlx->player.rotat_angle - (FOV / 2);
-	while (i < mlx->win_w)
+	static int s;
+	while (i < 1)
 	{
-		mlx->rays[i].ray_angle = ray_angle;
+		// mlx->rays[i].ray_angle = ft_mod(ray_angle, PI * 2);
+		// if (mlx->rays[i].ray_angle < 0)
+		// printf("ray : %f\n", (ray_angle * 180)  / PI);
+		// 	mlx->rays[i].ray_angle = PI * 2 + mlx->rays[i].ray_angle;
+		normalize_ray(mlx, i, ray_angle);
+		// printf("%f\n", mlx->rays[i].ray_angle);
 		// draw_line(mlx, mlx->rays[i].ray_angle, mlx->player.x + 1, mlx->player.y + 1);
 		get_intersect_and_draw(mlx, i);
-		ray_angle += FOV / mlx->win_w;
+		ray_angle += FOV / (mlx->win_w);
 		i++;
 	}
+	i = 0;
+	// // ray_angle = mlx->player.rotat_angle - (FOV / 2);
+	while (i < 1)
+	{
+		// draw_line(mlx, mlx->rays[i].ray_angle, mlx->player.x + 1, mlx->player.y + 1);
+		// printf("ray[%d]: %f\n", i, (mlx->rays[i].ray_angle * 180) / PI);
+		
+		draw_ray_line(mlx, mlx->rays[i].ray_angle, mlx->player.x, mlx->player.y, i);
+		i++;
+	}
+	s = 1;
 }
 int	render_map(t_mlx *mlx)
 {
@@ -355,8 +402,8 @@ int	move_player(int key, t_mlx *mlx)
 
 void	init_player(t_mlx *mlx)
 {
-	mlx->player.rotat_angle = 90 * (M_PI / 180);
-	mlx->player.rot_speed = 8 * (M_PI / 180);
+	mlx->player.rotat_angle = -90 * (PI / 180);
+	mlx->player.rot_speed = 8 * (PI / 180);
 	mlx->player.mov_speed = 8;
 }
 int	main()

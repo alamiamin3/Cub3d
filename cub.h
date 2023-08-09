@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 09:49:16 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/08 19:43:15 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/09 20:18:43 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,10 @@
 
 #include <mlx.h>
 #include <math.h>
-#define TILE_SIZE 32
+#define TILE_SIZE 64
 #define MINI_SIZE 20
 #define FOV 60 * (M_PI / 180)
+#define PI 3.141592
 
 typedef struct s_ray
 {
@@ -27,6 +28,10 @@ typedef struct s_ray
 	double	v_intersec_x;
 	double	v_intersec_y;
 	double	dis;
+	int	f_l;
+	int	f_r;
+	int	f_u;
+	int	f_d;
 }	t_ray;
 typedef struct s_map
 {
@@ -44,8 +49,8 @@ typedef struct s_img
 
 typedef	struct  s_player
 {
-	float	x;
-	float y;
+	double	x;
+	double y;
 	int turn_direction;
 	int walk_direction;
 	double rotat_angle;
