@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 09:49:16 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/09 20:18:43 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/10 16:32:21 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 #include <math.h>
 #define TILE_SIZE 64
 #define MINI_SIZE 20
-#define FOV 60 * (M_PI / 180)
 #define PI 3.141592
+#define FOV 60 * (PI / 180)
 
 typedef struct s_ray
 {
