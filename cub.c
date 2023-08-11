@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 09:49:09 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/10 20:36:37 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/11 22:00:15 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,16 +79,16 @@ void	my_mlx_pixel_put(t_mlx *mlx, int x, int y, int color)
 	dst = mlx->img.data + (y * mlx->img.size + x * (mlx->img.bpp / 8));
 	*(unsigned int*)dst = color;
 }
-void	draw_line(t_mlx *mlx, double angle, double x1, double y1)
+void	draw_line(t_mlx *mlx, float angle, float x1, float y1)
 {
-	double dx;
-	double dy;
-	double x2;
-	double y2;
+	float dx;
+	float dy;
+	float x2;
+	float y2;
 	
 	int step;
-	double x_inc;
-	double y_inc;
+	float x_inc;
+	float y_inc;
 	int i;
 
 	i = 0;
@@ -110,16 +110,16 @@ void	draw_line(t_mlx *mlx, double angle, double x1, double y1)
 		i++;
 	}
 }
-void	draw_ray_line(t_mlx *mlx, double angle, double x1, double y1, int j)
+void	draw_ray_line(t_mlx *mlx, float angle, float x1, float y1, int j)
 {
-	double dx;
-	double dy;
-	double x2;
-	double y2;
+	float dx;
+	float dy;
+	float x2;
+	float y2;
 	
 	int step;
-	double x_inc;
-	double y_inc;
+	float x_inc;
+	float y_inc;
 	int i;
 
 	i = 0;
@@ -135,7 +135,7 @@ void	draw_ray_line(t_mlx *mlx, double angle, double x1, double y1, int j)
 	y_inc = dy / step;
 	while (i < step)
 	{
-		my_mlx_pixel_put(mlx,x1, y1, 0xF93308);
+		my_mlx_pixel_put(mlx,MAP_SCALE * x1, MAP_SCALE * y1, 0xF93308);
 		x1 += x_inc;
 		y1 += y_inc;
 		i++;
@@ -165,11 +165,11 @@ void	draw_map_img(char **map,  t_mlx *mlx)
 					x = 0;
 					while (x < TILE_SIZE)
 					{
-						if (x + 1 == TILE_SIZE || x == 0 || y + 1 == TILE_SIZE || y == 0)
-							my_mlx_pixel_put(mlx, x + j, y + i, 0xFCB5A5);
-							// mlx_pixel_put(mlx->mlx_init, mlx->mlx_win, x + j, y + i, 0xFCB5A5);
-						else
-							my_mlx_pixel_put(mlx, x + j, y + i, 0x000000);
+						// if (x + 1 == TILE_SIZE || x == 0 || y + 1 == TILE_SIZE || y == 0)
+						// 	my_mlx_pixel_put(mlx, MAP_SCALE * (x + j), MAP_SCALE * (y + i), 0xFCB5A5);
+						// 	// mlx_pixel_put(mlx->mlx_init, mlx->mlx_win, x + j, y + i, 0xFCB5A5);
+						// else
+							my_mlx_pixel_put(mlx, MAP_SCALE * (x + j), MAP_SCALE * (y + i), 0x000000);
 							// mlx_pixel_put(mlx->mlx_init, mlx->mlx_win, x + j, y + i, 0x000000);
 							
 						x++;
@@ -184,11 +184,11 @@ void	draw_map_img(char **map,  t_mlx *mlx)
 					x = 0;
 					while (x < TILE_SIZE)
 					{
-						if (x + 1 == TILE_SIZE || x == 0 || y + 1 == TILE_SIZE || y == 0)
-							my_mlx_pixel_put(mlx, x + j, y + i, 0xFCB5A5);
-							// mlx_pixel_put(mlx->mlx_init, mlx->mlx_win, x + j, y + i, 0xFCB5A5);
-						else
-							my_mlx_pixel_put(mlx, x + j, y + i, 0xFFFFFF);
+						// if (x + 1 == TILE_SIZE || x == 0 || y + 1 == TILE_SIZE || y == 0)
+						// 	my_mlx_pixel_put(mlx, MAP_SCALE * (x + j), MAP_SCALE * (y + i), 0xFCB5A5);
+						// 	// mlx_pixel_put(mlx->mlx_init, mlx->mlx_win, x + j, y + i, 0xFCB5A5);
+						// else
+							my_mlx_pixel_put(mlx, MAP_SCALE * (x + j), MAP_SCALE * (y + i), 0xFFFFFF);
 							// mlx_pixel_put(mlx->mlx_init, mlx->mlx_win, x + j, y + i, 0xFFFFFF);
 							
 						x++;
@@ -197,28 +197,29 @@ void	draw_map_img(char **map,  t_mlx *mlx)
 				}
 				
 			}
-			if (map[i/TILE_SIZE][j/TILE_SIZE] == 'N' && first == 0)
-			{
-				// mlx_put_image_to_window(mlx->mlx_init, mlx->mlx_win, player->img.img_ptr, j + 18  , i + 18);
-				// y = 0;
-				// while (y < TILE_SIZE / 8)
-				// {
-				// 	x = 0;
-				// 	while (x < TILE_SIZE / 8)
-				// 	{
-				// 		// if (x + 1 == TILE_SIZE || x == 0 || y + 1 == TILE_SIZE || y == 0)
-				// 		// 	mlx_pixel_put(mlx->mlx_init, mlx->mlx_win, x + j, y + i, 0xFCB5A5);
-				// 		// else
-				// 			mlx_pixel_put(mlx->mlx_init, mlx->mlx_win, x + j + 18 , y + i + 18, 0xF93308);
+			// if (map[i/TILE_SIZE][j/TILE_SIZE] == 'N' && first == 0)
+			// {
+			// 	// mlx_put_image_to_window(mlx->mlx_init, mlx->mlx_win, player->img.img_ptr, j + 18  , i + 18);
+			// 	// y = 0;
+			// 	// while (y < TILE_SIZE / 8)
+			// 	// {
+			// 	// 	x = 0;
+			// 	// 	while (x < TILE_SIZE / 8)
+			// 	// 	{
+			// 	// 		// if (x + 1 == TILE_SIZE || x == 0 || y + 1 == TILE_SIZE || y == 0)
+			// 	// 		// 	mlx_pixel_put(mlx->mlx_init, mlx->mlx_win, x + j, y + i, 0xFCB5A5);
+			// 	// 		// else
+			// 	// 			mlx_pixel_put(mlx->mlx_init, mlx->mlx_win, x + j + 18 , y + i + 18, 0xF93308);
 							
-				// 		x++;
-				// 	}
-				// 	y++;
-				// }
-				mlx->player.x = j + 18;
-				mlx->player.y = i + 18;
-				first = 1;
-			}
+			// 	// 		x++;
+			// 	// 	}
+			// 	// 	y++;
+			// 	// }
+			// 	mlx->player.x = j + 18;
+			// 	mlx->player.y = i + 18;
+				
+			// 	first = 1;
+			// }
 			j += TILE_SIZE;
 		}
 		i += TILE_SIZE;
@@ -231,7 +232,7 @@ int	draw_player(t_mlx *mlx)
 	float x;
 	float y;
 	y = 0;
-			my_mlx_pixel_put(mlx, x + mlx->player.x , y + mlx->player.y, 0xF93308);			
+			my_mlx_pixel_put(mlx, MAP_SCALE * mlx->player.x , MAP_SCALE * (mlx->player.y), 0xF93308);			
 	// while (y < TILE_SIZE / 13.5)
 	// {
 	// 	x = 0;
@@ -245,60 +246,73 @@ int	draw_player(t_mlx *mlx)
 	return (0);
 }
 
-double ft_mod(double x, double y) {
+float ft_mod(float x, float y) {
 
-    double div = x / y;
-    double rounded = round(div);  
-    double result = x - rounded * y;
-    return result + 0.000001;
+    float div = x / y;
+    float rounded = round(div);  
+    float result = x - rounded * y;
+    return result ;
 }
-void	normalize_ray(t_mlx *mlx, int i, double ray_angle)
+void	normalize_ray(t_mlx *mlx, int i, float ray_angle)
 {
 	// mlx->rays[i].ray_angle = fmod(ray_angle, PI * 2);
 		// if (mlx->rays[i].ray_angle < 0 )
 		// 	mlx->rays[i].ray_angle = PI * 2 + mlx->rays[i].ray_angle;
 	    while (ray_angle < 0 ) {
 		// printf("mode : %lf\n", ray_angle);
-        ray_angle += 2 * PI; // Add 2π to make it positive
+        ray_angle += 2 * PI; 
     }
 	// ray_angle = round(ray_angle);
     while (ray_angle >= 2 * PI ) {
-        ray_angle -= 2 * M_PI; // Subtract 2π to bring it within range
+        ray_angle -= 2 * PI; 
     }
 	mlx->rays[i].ray_angle  = ray_angle;
 	
 		// printf("NORM : %f PLAYER : %f\n", (mlx->rays[i].ray_angle ), mlx->player.rotat_angle);
+	// printf("u : %d , d : %d r : %d, l : %d\n", mlx->rays[i].f_u, mlx->rays[i].f_d, mlx->rays[i].f_r, mlx->rays[i].f_l);
+}
+
+void	define_direction(t_mlx *mlx, int i)
+{
 	mlx->rays[i].f_d = mlx->rays[i].ray_angle > 0 && mlx->rays[i].ray_angle < PI ? 1 : 0;
 	mlx->rays[i].f_u = !mlx->rays[i].f_d;
 	mlx->rays[i].f_r = mlx->rays[i].ray_angle > 1.5 * PI || mlx->rays[i].ray_angle < PI / 2 ? 1 : 0;
 	mlx->rays[i].f_l = !mlx->rays[i].f_r;
-	// printf("u : %d , d : %d r : %d, l : %d\n", mlx->rays[i].f_u, mlx->rays[i].f_d, mlx->rays[i].f_r, mlx->rays[i].f_l);
+	// if (mlx->rays[i].ray_angle > 0 && mlx->rays[i].ray_angle < PI)
+	// 	mlx->rays[i].f_d = 1;
+	// else
+	// 	mlx->rays[i].f_u = 1;
+	// if (mlx->rays[i].ray_angle > 1.5 * PI || mlx->rays[i].ray_angle < PI / 2)
+	// 	mlx->rays[i].f_r = 1;
+	// else
+	// 	mlx->rays[i].f_l = 1;
 }
 void	cast_rays(t_mlx *mlx)
 {
 	int	i;
-	double ray_angle;
+	float ray_angle;
 
 	i = 0;
 	ray_angle = mlx->player.rotat_angle - (FOV / 2);
 	static int s;
 	while (i < mlx->win_w)
 	{
-		// mlx->rays[i].ray_angle = ft_mod(ray_angle, PI * 2);
-		// if (mlx->rays[i].ray_angle < 0)
-		// printf("ray : %f\n", (ray_angle * 180)  / PI);
-		// 	mlx->rays[i].ray_angle = PI * 2 + mlx->rays[i].ray_angle;
 		mlx->rays[i].ray_angle  = ray_angle;
-		// printf("FROM CAST RAY %f\n", ray_angle);
 		normalize_ray(mlx, i, ray_angle);
+		define_direction(mlx, i);
 		// printf("%f\n", mlx->rays[i].ray_angle);
 		// draw_line(mlx, mlx->rays[i].ray_angle, mlx->player.x + 1, mlx->player.y + 1);
 		get_intersect_and_draw(mlx, i);
 		ray_angle += FOV / (mlx->win_w );
 		i++;
 	}
+}
+void	draw_rays(t_mlx *mlx)
+{
+	int i;
+
 	i = 0;
-	// // ray_angle = mlx->player.rotat_angle - (FOV / 2);
+	// // // ray_angle = mlx->player.rotat_angle - (FOV / 2);
 	while (i < mlx->win_w)
 	{
 		// draw_line(mlx, mlx->rays[i].ray_angle, mlx->player.x + 1, mlx->player.y + 1);
@@ -310,12 +324,20 @@ void	cast_rays(t_mlx *mlx)
 }
 int	render_map(t_mlx *mlx)
 {
+	// mlx->img.img_ptr = mlx_new_image(mlx->mlx_init, mlx->win_w, mlx->win_h);
+	// mlx->img.data = mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size, &mlx->img.endian);
 	mlx_clear_window(mlx->mlx_init, mlx->mlx_win);
+	cast_rays(mlx);
+	render_projection(mlx);
+	render_ceiling(mlx);
+	render_floor(mlx);
+	render_walls(mlx);
 	draw_map_img(mlx->map, mlx);
 	draw_player(mlx);
-	cast_rays(mlx);
+	draw_rays(mlx);
 	// get_horizontal_intersect(mlx);
 	mlx_put_image_to_window(mlx->mlx_init, mlx->mlx_win, mlx->img.img_ptr, 0, 0);
+	// mlx_destroy_image(mlx->mlx_init, mlx->img.img_ptr);
 	return (0);
 }
 
@@ -366,8 +388,10 @@ int	check_wall(t_mlx *mlx, int move)
 }
 void	move_up(t_mlx *mlx)
 {
+	printf("BEFORE : X = %f   Y = %f \n", mlx->player.x, mlx->player.y);
 	mlx->player.x += cos(mlx->player.rotat_angle) * mlx->player.mov_speed;
 	mlx->player.y += sin(mlx->player.rotat_angle) * mlx->player.mov_speed;
+	printf("AFTER : X = %f   Y = %f \n", mlx->player.x, mlx->player.y);
 }
 void	move_down(t_mlx *mlx)
 {
@@ -421,29 +445,69 @@ int	move_player(int key, t_mlx *mlx)
 		move_right(mlx);
 	return (0);
 }
-
+void	get_player_pos(t_mlx *mlx)
+{
+	int	i;
+	int j;
+	
+	i = 0;
+	while(i < mlx->win_h / TILE_SIZE)
+	{
+		j = 0;
+		while (j < mlx->win_w / TILE_SIZE)
+		{
+			if (mlx->map[i][j] == 'N')
+			{
+				mlx->player.x = j * TILE_SIZE + 18;
+				mlx->player.y = i * TILE_SIZE + 18;
+				printf("j = %d | x = %f, i = %d | y= %f\n", j,  mlx->player.x, i, mlx->player.y);
+				return ;
+			}
+			j++;
+		}
+		i++;
+	}
+}
 void	init_player(t_mlx *mlx)
 {
+		get_player_pos(mlx);
+		
+	// draw_map_img(mlx->map, mlx);
 	mlx->player.rotat_angle = -90 * (PI / 180);
-	mlx->player.rot_speed = 8 * (PI / 180);
+	mlx->player.rot_speed = 7 * (PI / 180);
 	mlx->player.mov_speed = 6.5;
+}
+void	init_rays_dir(t_mlx *mlx)
+{
+	int i;
+
+	i = 0;
+	while (i < mlx->win_w)
+	{
+		mlx->rays[i].f_d = 0;
+		mlx->rays[i].f_u = 0;
+		mlx->rays[i].f_r = 0;
+		mlx->rays[i].f_l = 0;
+		i++;
+	}
+	
 }
 int	main()
 {
 	char map[14][13] = {
 								{'1', '1' , '1' , '1' , '1', '1' , '1' , '1' , '1' , '1' , '1' , '1' , '1' } ,
-								{'1', '0' , '0' , '0' , '1', '1' , '1' , '1' , '1' , '1' , '1' , '1' , '1' } ,
+								{'1', '0' , '0' , '0' , '0', '0' , '0' , '0' , '0' , '0' , '0' , '0' , '1' } ,
 								{'1', '0' , '0' , '1' , '1', '1' , '1' , '1' , '1' , '1' , '1' , '1' , '1' } ,
 								{'1', '0' , '0' , '0' , '1', '1' , '0' , '0' , '0' , '0' , '0' , '0' , '1' } ,
-								{'1', '0' , '0' , '0' , '1', '1' , '0' , '0' , '0' , '0' , '0' , '0' , '1' } ,
-								{'1', '0' , '0' , '0' , '0', '0' , 'N' , '1' , '1' , '0' , '0' , '0' , '1' } ,
+								{'1', '0' , '0' , '0' , '1', '1' , '1' , '0' , '0' , '0' , '0' , '0' , '1' } ,
+								{'1', '0' , '0' , '0' , '0', '0' , '0' , '1' , '1' , '0' , '0' , '0' , '1' } ,
 								{'1', '0' , '0' , '0' , '0', '0' , '0' , '0' , '0' , '1' , '0' , '0' , '1' } ,
 								{'1', '0' , '0' , '0' , '0', '0' , '0' , '0' , '0' , '1' , '0' , '0' , '1' } ,
 								{'1', '0' , '0' , '0' , '0', '0' , '0' , '0' , '0' , '1' , '0' , '0' , '1' } ,
-								{'1', '1' , '1' , '1' , '1', '0' , '1' , '1' , '1' , '1' , '1' , '1' , '1' } ,
+								{'1', '0' , '1' , '1' , '1', '0' , '1' , '1' , '1' , '1' , '1' , '1' , '1' } ,
 								{'1', '0' , '0' , '0' , '0', '0' , '0' , '0' , '1' , '1' , '1' , '1' , '1' } ,
 								{'1', '0' , '1' , '1' , '1', '1' , '0' , '1' , '1' , '1' , '1' , '1' , '1' } ,
-								{'1', '0' , '0' , '0' , '0', '0' , '0' , '1' , '1' , '1' , '1' , '1' , '1' } ,
+								{'1', 'N' , '0' , '0' , '0', '0' , '0' , '1' , '1' , '1' , '1' , '1' , '1' } ,
 								{'1', '1' , '1' , '1' , '1', '1' , '1' , '1' , '1' , '1' , '1' , '1' , '1' }
 							};
 	t_mlx	*mlx;
@@ -459,8 +523,7 @@ int	main()
 	mlx->img.data = mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size, &mlx->img.endian);
 	mlx->rays = (t_ray *)malloc(sizeof(t_ray) * mlx->win_w);
 	init_player(mlx);
-	printf("%f\n", FOV);
-	printf("%d\n", mlx->img.size);
+	init_rays_dir(mlx);
 	mlx_hook(mlx->mlx_win, 02, 0, move_player, mlx);
 	mlx_loop_hook(mlx->mlx_init, render_map, mlx);
 	mlx_loop(mlx->mlx_init);

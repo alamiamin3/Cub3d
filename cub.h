@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 09:49:16 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/10 16:32:21 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/11 21:59:43 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,26 @@
 #include <mlx.h>
 #include <math.h>
 #define TILE_SIZE 64
-#define MINI_SIZE 20
+#define MAP_SCALE 0.2
 #define PI 3.141592
 #define FOV 60 * (PI / 180)
 
 typedef struct s_ray
 {
-	double	ray_angle;
-	double	h_intersec_x;
-	double	h_intersec_y;
-	double	v_intersec_x;
-	double	v_intersec_y;
-	double	dis;
+	float	ray_angle;
+	float	h_intersec_x;
+	float	h_intersec_y;
+	float	v_intersec_x;
+	float	v_intersec_y;
+	float	dis;
 	int	f_l;
 	int	f_r;
 	int	f_u;
 	int	f_d;
+	float top_wall;
+	float bot_wall;
+	int hit_v;
+	int hit_h;
 }	t_ray;
 typedef struct s_map
 {
@@ -49,11 +53,11 @@ typedef struct s_img
 
 typedef	struct  s_player
 {
-	double	x;
-	double y;
+	float	x;
+	float y;
 	int turn_direction;
 	int walk_direction;
-	double rotat_angle;
+	float rotat_angle;
 	float mov_speed; //how many pixel per frame to increase or decrease
 	float	rot_speed; //how many degrees per frame to increase or decreaase
 	
@@ -66,6 +70,7 @@ typedef	struct s_mlx
 	int	win_w;
 	char **map;
 	t_img	img;
+	t_img	m_map;
 	t_player player;
 	t_ray	*rays;
 }	t_mlx;
@@ -76,12 +81,18 @@ typedef struct s_game
 	t_mlx	*mlx;
 	char	**map;
 	t_player player;
+	
 }	t_game;
 
 void    get_intersect_and_draw(t_mlx *mlx, int i);
 void	get_horizontal_intersect(t_mlx *mlx, int i);
 void	get_vertical_intersect(t_mlx *mlx, int i);
-void	draw_line(t_mlx *mlx, double angle, double x1, double y1);
-void	draw_ray_line(t_mlx *mlx, double angle, double x1, double y1, int j);
-
+void	draw_line(t_mlx *mlx, float angle, float x1, float y1);
+void	draw_ray_line(t_mlx *mlx, float angle, float x1, float y1, int j);
+void    render_projection(t_mlx *mlx);
+void	draw_project(t_mlx *mlx, float x1, float y1, float wall_height, int color);
+void	my_mlx_pixel_put(t_mlx *mlx, int x, int y, int color);
+void	render_walls(t_mlx *mlx);
+void	render_ceiling(t_mlx *mlx);
+void	render_floor(t_mlx *mlx);
 #endif

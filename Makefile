@@ -1,7 +1,7 @@
 NAME = cub3d
 
 
-SOURCES = cub.c intersection.c
+SOURCES = cub.c intersection.c wall_render.c
 
 
 

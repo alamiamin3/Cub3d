@@ -6,26 +6,37 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 19:00:25 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/10 20:22:10 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/11 21:59:43 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub.h"
 #include <stdio.h>
 
+void	get_horizontal_steps(t_mlx *mlx, int i, float *xs, float *ys)
+{
+	if (mlx->rays[i].f_d)
+		*ys = TILE_SIZE;
+	else
+		*ys = -TILE_SIZE;
+	*xs = *ys / (tan(mlx->rays[i].ray_angle));
+	if ((mlx->rays[i].f_r && *xs < 0) || (mlx->rays[i].f_l && *xs > 0))
+		*xs *= -1;
+}
 void	get_horizontal_intersect(t_mlx *mlx, int i)
 {
-	double y_intersect;
-	double x_intersect;
-	double y_step;
-	double x_step;
+	float y_intersect;
+	float x_intersect;
+	float y_step;
+	float x_step;
 
 	
-	y_step = TILE_SIZE;
-	y_step *= mlx->rays[i].f_d ? 1 : -1;
-	x_step = y_step / (tan(mlx->rays[i].ray_angle));
-	x_step *= (mlx->rays[i].f_r && x_step < 0) ? -1 : 1;
-	x_step *= (mlx->rays[i].f_l && x_step > 0) ? -1 : 1;
+	// y_step = TILE_SIZE;
+	// y_step *= mlx->rays[i].f_d ? 1 : -1;
+	// x_step = y_step / (tan(mlx->rays[i].ray_angle));
+	// x_step *= (mlx->rays[i].f_r && x_step < 0) ? -1 : 1;
+	// x_step *= (mlx->rays[i].f_l && x_step > 0) ? -1 : 1;
+	get_horizontal_steps(mlx, i, &x_step, &y_step);
 		// printf("Xstep = %lf ; Ystep = %lf       %f\n", x_step, y_step, (mlx->rays[i].ray_angle) );
 	y_intersect = floor(mlx->player.y / TILE_SIZE) * TILE_SIZE;
 	y_intersect += mlx->rays[i].f_d ? TILE_SIZE : 0;
@@ -49,21 +60,21 @@ void	get_horizontal_intersect(t_mlx *mlx, int i)
     	mlx->rays[i].h_intersec_x = x_intersect;
     	mlx->rays[i].h_intersec_y = y_intersect ;
 		// printf("dx = %f ; dy = %f\n", dx, dy);
-		double dy = ((y_intersect ) - mlx->player.y ) ;
-		double dx = ((x_intersect ) - mlx->player.x) ;
+		float dy = ((y_intersect ) - mlx->player.y ) ;
+		float dx = ((x_intersect ) - mlx->player.x) ;
 		mlx->rays[i].dis =  sqrt(dx * dx + dy * dy);
+		mlx->rays[i].hit_h = 1;
 	// }
 	// else
 	// 	mlx->rays[i].dis =  0;
 		
-	// printf("dis hor %f\n", mlx->rays[i].dis);
 }
 void    get_vertical_intersect(t_mlx *mlx, int i)
 {
-    double y_intersect;
-	double x_intersect;
-	double y_step;
-	double x_step;
+    float y_intersect;
+	float x_intersect;
+	float y_step;
+	float x_step;
     x_step = TILE_SIZE;
 	x_step *= mlx->rays[i].f_r ? 1 : -1;
 	y_step = x_step * tan(mlx->rays[i].ray_angle);
@@ -74,7 +85,7 @@ void    get_vertical_intersect(t_mlx *mlx, int i)
 	y_intersect = (mlx->player.y + ((x_intersect - mlx->player.x) * tan(mlx->rays[i].ray_angle)));
 		// printf("VERTICAL\n");
 		// printf("VERTICAL x_b = %f ; y_b = %f\n", x_intersect, y_intersect);
-		printf("1111 = %d\n", ((int)(((x_intersect) )/ TILE_SIZE)));
+		// printf("1111 = %d\n", ((int)(((x_intersect) )/ TILE_SIZE)));
     while ((int)y_intersect / TILE_SIZE >= 0 && (int)y_intersect / TILE_SIZE < mlx->win_h / TILE_SIZE && 
 		(int)x_intersect / TILE_SIZE >= 0 && (int)x_intersect / TILE_SIZE < mlx->win_w / TILE_SIZE  && mlx->map[(int)((y_intersect) / TILE_SIZE)][(int)(((x_intersect) + (mlx->rays[i].f_l ? -1 : 1 ))/ TILE_SIZE)] != '1')
 	{
@@ -87,10 +98,15 @@ void    get_vertical_intersect(t_mlx *mlx, int i)
 	// {
     	 mlx->rays[i].v_intersec_x = x_intersect ;
     	mlx->rays[i].v_intersec_y = y_intersect ;
-		double dx = ((x_intersect ) - mlx->player.x);
-		double dy = (y_intersect  - mlx->player.y );
+		float dx = ((x_intersect ) - mlx->player.x);
+		float dy = (y_intersect  - mlx->player.y );
     	if (sqrt(dx * dx + dy * dy) < mlx->rays[i].dis)
-        mlx->rays[i].dis = sqrt(dx * dx + dy * dy);
+		{	
+			mlx->rays[i].hit_v = 1;
+			mlx->rays[i].hit_h = 0;
+        	mlx->rays[i].dis = sqrt(dx * dx + dy * dy);
+		}
+	// printf("DIS FROM INTER %f\n", mlx->rays[i].dis);
 	// }
 	// else
 	// {
@@ -102,6 +118,8 @@ void    get_vertical_intersect(t_mlx *mlx, int i)
 void    get_intersect_and_draw(t_mlx *mlx, int i)
 {
 	static int it;
+	mlx->rays[i].hit_h = 0;
+	mlx->rays[i].hit_v = 0;
 	
 	if (it == 0)
    	{
