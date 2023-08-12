@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 22:10:27 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/11 21:59:43 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/12 21:08:42 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void	render_floor(t_mlx *mlx)
 		i++;
 	}
 }
+
 void	render_walls(t_mlx *mlx)
 {
 	int i;
@@ -109,6 +110,7 @@ void    render_projection(t_mlx *mlx)
 			mlx->rays[i].top_wall = 0;
 		if (mlx->rays[i].bot_wall > mlx->win_h)
 			mlx->rays[i].bot_wall = mlx->win_h;
+		printf("%f %f\n", mlx->rays[i].top_wall, mlx->rays[i].bot_wall);
         i ++;
     }
 	// render_ceiling(mlx);

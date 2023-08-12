@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 09:49:16 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/11 21:59:43 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/12 22:50:44 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,14 @@ typedef	struct  s_player
 	float	rot_speed; //how many degrees per frame to increase or decreaase
 	
 }	t_player;
+
+typedef	struct  s_texture
+{
+	t_img	img;
+	int	h;
+	int	w;
+}	t_texture;
+
 typedef	struct s_mlx
 {
 	void	*mlx_init;
@@ -73,6 +81,7 @@ typedef	struct s_mlx
 	t_img	m_map;
 	t_player player;
 	t_ray	*rays;
+	t_texture	texture;
 }	t_mlx;
 
 
