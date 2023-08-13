@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 09:49:16 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/12 22:50:44 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/13 12:16:43 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ typedef	struct  s_player
 {
 	float	x;
 	float y;
-	int turn_direction;
-	int walk_direction;
+	int turn_direction;  // 0 (default)  1 (right) -1 (left)
+	int walk_direction;  // 0 (default)  1 (up)    -1 (down)
 	float rotat_angle;
 	float mov_speed; //how many pixel per frame to increase or decrease
 	float	rot_speed; //how many degrees per frame to increase or decreaase

@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 09:49:09 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/12 22:51:57 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/13 15:15:59 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,9 +209,9 @@ int	render_map(t_mlx *mlx)
 	render_ceiling(mlx);
 	render_floor(mlx);
 	render_walls(mlx);
-	// draw_map_img(mlx->map, mlx);
-	// draw_player(mlx);
-	// draw_rays(mlx);
+	draw_map_img(mlx->map, mlx);
+	draw_player(mlx);
+	draw_rays(mlx);
 	// get_horizontal_intersect(mlx);
 	mlx_put_image_to_window(mlx->mlx_init, mlx->mlx_win, mlx->img.img_ptr, 0, 0);
 	// mlx_destroy_image(mlx->mlx_init, mlx->img.img_ptr);
@@ -265,8 +265,8 @@ int	check_wall(t_mlx *mlx, int move)
 }
 void	move_up(t_mlx *mlx)
 {
-	mlx->player.x += cos(mlx->player.rotat_angle) * mlx->player.mov_speed ;
-	mlx->player.y += sin(mlx->player.rotat_angle) * mlx->player.mov_speed ;
+	mlx->player.x += cos(mlx->player.rotat_angle) * mlx->player.mov_speed;
+	mlx->player.y += sin(mlx->player.rotat_angle) * mlx->player.mov_speed;
 }
 void	move_down(t_mlx *mlx)
 {
@@ -332,7 +332,6 @@ void	get_player_pos(t_mlx *mlx)
 			{
 				mlx->player.x = j * TILE_SIZE + TILE_SIZE / 2;
 				mlx->player.y = i * TILE_SIZE + TILE_SIZE / 2;
-				printf("j = %d | x = %f, i = %d | y= %f\n", j,  mlx->player.x, i, mlx->player.y);
 				return ;
 			}
 			j++;
@@ -347,7 +346,7 @@ void	init_player(t_mlx *mlx)
 	// draw_map_img(mlx->map, mlx);
 	mlx->player.rotat_angle = -90 * (PI / 180);
 	mlx->player.rot_speed = 3 * (PI / 180);
-	mlx->player.mov_speed = 2;
+	mlx->player.mov_speed =12;
 }
 void	init_rays_dir(t_mlx *mlx)
 {
