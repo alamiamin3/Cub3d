@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 22:10:27 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/13 15:29:17 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/13 22:05:27 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	render_floor(t_mlx *mlx)
 	i = 0;
 	while (i < mlx->win_w)
 	{
-		draw_project(mlx, i, mlx->rays[i].bot_wall - 1, mlx->win_h, 0x52362C);
+		draw_project(mlx, i, mlx->rays[i].bot_wall - 1, mlx->win_h, 0xBFFFCC);
 		i++;
 	}
 }
@@ -128,8 +128,8 @@ void	render_walls(t_mlx *mlx)
 	int color_h;
 	int color_v;
 	i = 0;
-	color_h = 0xF7EDA4;
-	// color_v = 0xBBB483;
+	color_h = 0xFF7800;
+	color_v = 0x9A4800;
 	while (i < mlx->win_w)
 	{
 		if (mlx->rays[i].hit_h)
@@ -137,8 +137,8 @@ void	render_walls(t_mlx *mlx)
 		else
 		{
 			// color_v = get_vertical_texture_pixel(mlx);
-			draw_vertical_texture(mlx, i, mlx->rays[i].top_wall, mlx->rays[i].bot_wall);
-        	// draw_project(mlx, i, mlx->rays[i].top_wall, mlx->rays[i].bot_wall, color_v);
+			// draw_vertical_texture(mlx, i, mlx->rays[i].top_wall, mlx->rays[i].bot_wall);
+        	draw_project(mlx, i, mlx->rays[i].top_wall, mlx->rays[i].bot_wall, color_v);
 		}
 			
 		i++;

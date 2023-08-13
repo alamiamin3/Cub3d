@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 09:49:16 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/13 12:16:43 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/13 22:44:41 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 #include <mlx.h>
 #include <math.h>
-#define TILE_SIZE 64
+#define TILE_SIZE 72
 #define MAP_SCALE 0.2
 #define PI 3.141592
 #define FOV 60 * (PI / 180)
