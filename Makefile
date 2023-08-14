@@ -20,7 +20,7 @@ $(NAME): $(OBJ)
 
 
 %.o: %.c cub.h 
-	$(CC)  -Imlx -c $< -o $@
+	$(CC)  -O3 -Imlx -c $< -o $@
 
 clean:
 	rm -f $(OBJ) 
