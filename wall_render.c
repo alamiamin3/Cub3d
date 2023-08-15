@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 22:10:27 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/14 20:43:30 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/15 20:47:34 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	render_ceiling(t_mlx *mlx)
 	i = 0;
 	while (i < mlx->win_w)
 	{
-		draw_project(mlx, i, 0, mlx->rays[i].top_wall, 0xB8F1F4);
+		draw_project(mlx, i, 0, mlx->rays[i].top_wall, 0x10DEFF);
 		i++;
 	}
 }
@@ -64,28 +64,34 @@ void	render_floor(t_mlx *mlx)
 	i = 0;
 	while (i < mlx->win_w)
 	{
-		draw_project(mlx, i, mlx->rays[i].bot_wall, mlx->win_h, 0xBFFFCC);
+		draw_project(mlx, i, mlx->rays[i].bot_wall, mlx->win_h, 0x5B595B);
 		i++;
 	}
 }
 int	get_vertical_texture_pixel(t_mlx *mlx)
 {
 	static int x_t;
+	static int check;
 	static int y_t;
 	char	*dst;
 	int	color ;
 	
-	if (y_t > mlx->texture.img.size)
+	if (check > TILE_SIZE)
 	{
 		y_t = 0;
-		x_t ++;
-		if (x_t > TILE_SIZE)
-			x_t = 0;
+		check = 0;
+		// x_t ++;
+		// if (x_t > TILE_SIZE)
+		// 	x_t = 0;
 	}
 
-		dst = mlx->texture.img.data + y_t * mlx->texture.img.size + x_t * (mlx->texture.img.bpp / 8);
+		dst = mlx->texture.img.data + y_t + mlx->texture.text_offset * (mlx->texture.img.bpp / 8);
 		color = *(unsigned int *)dst;
-		y_t ++;
+		// printf("TEXT[X] = %d  | TEXT[Y] = %d \n", mlx->texture.text_offset * (mlx->texture.img.bpp / 8), y_t );
+		// if (y_t == mlx->texture.img.size)
+		// 	exit (0);
+		y_t += mlx->texture.img.size ;
+		check ++;
 	return (color);
 }
 void	draw_vertical_texture(t_mlx *mlx, float x1, float y1, float wall_height)
@@ -127,16 +133,20 @@ void	render_walls(t_mlx *mlx)
 	int i;
 	int color_h;
 	int color_v;
+	
 	i = 0;
-	color_v = 0xFF7800;
-	color_h = 0x9A4800;
+	color_v = 0xFFFFFF;
+	color_h = 0xD8D8D8;
 	while (i < mlx->win_w)
 	{
 		if (mlx->rays[i].hit_h)
 		{
         	draw_project(mlx, i, mlx->rays[i].top_wall, mlx->rays[i].bot_wall, color_h);
 			// color_h = get_vertical_texture_pixel(mlx);
+			// mlx->texture.text_offset = (int)fmod(mlx->rays[i].hit_x ,64);
 			// draw_vertical_texture(mlx, i, mlx->rays[i].top_wall, mlx->rays[i].bot_wall);
+			// printf("%d   %d %d\n", (int)fmod(mlx->rays[i].hit_x, 64), mlx->texture.img.size, mlx->texture.img.bpp);
+			// exit (0);
 		}
 		else
 		{
@@ -163,7 +173,7 @@ void    render_projection(t_mlx *mlx)
     {
 		correct_dis = cos(mlx->player.rotat_angle - mlx->rays[i].ray_angle) * mlx->rays[i].dis;
 		// printf("dsd %f\n", correct_dis);
-        proj_wall = proj_dis * (TILE_SIZE / (correct_dis + 0.5));
+        proj_wall = proj_dis * (TILE_SIZE / (correct_dis + (0 / 8)));
 		// printf("proj_dis : %f proj_wall : %f ray_dis : %f  , win_h : %d \n \n", proj_dis, proj_wall, mlx->rays[i].dis, mlx->win_h);
 		mlx->rays[i].top_wall = (mlx->win_h / 2) - (proj_wall / 2);
 		mlx->rays[i].bot_wall = (mlx->win_h / 2) + (proj_wall / 2);

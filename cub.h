@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 09:49:16 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/14 20:44:15 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/15 18:21:38 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,15 @@
 #define TILE_SIZE 64
 #define MAP_SCALE 0.2
 #define PI 3.141592
-#define FOV 60 * (PI / 180)
+#define FOV 1.02
 
 typedef struct s_ray
 {
 	float	ray_angle;
 	float	h_intersec_x;
 	float	h_intersec_y;
+	float	hit_x;
+	float	hit_y;
 	float	v_intersec_x;
 	float	v_intersec_y;
 	float	dis;
@@ -68,6 +70,7 @@ typedef	struct  s_texture
 	t_img	img;
 	int	h;
 	int	w;
+	int	text_offset;
 }	t_texture;
 
 typedef	struct s_mlx
@@ -104,4 +107,7 @@ void	my_mlx_pixel_put(t_mlx *mlx, int x, int y, int color);
 void	render_walls(t_mlx *mlx);
 void	render_ceiling(t_mlx *mlx);
 void	render_floor(t_mlx *mlx);
+void	walk_player(t_mlx *mlx);
+int	rotate_player(t_mlx *mlx);
+int	check_wall(t_mlx *mlx);
 #endif

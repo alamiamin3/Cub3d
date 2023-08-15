@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 09:49:09 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/14 18:31:54 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/15 20:49:50 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,17 +141,8 @@ int	draw_player(t_mlx *mlx)
 	float y;
 	y = 0;
 	x = 0;
-	while (x < 20)
-	{
-		y = 0;
-		while (y < 20)
-		{
-			my_mlx_pixel_put(mlx, MAP_SCALE * (mlx->player.x + x) , MAP_SCALE * (mlx->player.y + y), 0xF93308);
-			y++;
-		}
-		x++;
-	}
-	draw_line(mlx, mlx->player.rotat_angle, mlx->player.x * MAP_SCALE, mlx->player.y * MAP_SCALE);
+
+	my_mlx_pixel_put(mlx, MAP_SCALE * (mlx->player.x + x) , MAP_SCALE * (mlx->player.y + y), 0xF93308);
 	return (0);
 }
 
@@ -216,14 +207,26 @@ void	draw_rays(t_mlx *mlx)
 int	render_map(t_mlx *mlx)
 {
 	// mlx_clear_window(mlx->mlx_init, mlx->mlx_win);
+		if (mlx->player.turn_direction != 0)
+		rotate_player(mlx);
+    // while (mlx->player.rotat_angle >= 2 * PI ) {
+    //     mlx->player.rotat_angle-= 2 * M_PI; 
+    // }
+		
+	// }
+	if (mlx->player.walk_direction != 0)
+	{
+		if (check_wall(mlx))
+			walk_player(mlx);
+	}
 	cast_rays(mlx);
 	render_projection(mlx);
 	render_walls(mlx);
 	render_ceiling(mlx);
 	render_floor(mlx);
-	// draw_map_img(mlx->map, mlx);
-	// draw_player(mlx);
-	// draw_rays(mlx);
+	draw_map_img(mlx->map, mlx);
+	draw_player(mlx);
+	draw_rays(mlx);
 	// get_horizontal_intersect(mlx);
 	mlx_put_image_to_window(mlx->mlx_init, mlx->mlx_win, mlx->img.img_ptr, 0, 0);
 	// mlx_destroy_image(mlx->mlx_init, mlx->img.img_ptr);
@@ -244,7 +247,7 @@ char** allocate_map(char map[14][13], int rows, int cols) {
 
     return arr;
 }
-int	check_wall(t_mlx *mlx, int move)
+int	check_wall(t_mlx *mlx)
 {
 	int	pos_x;
 	int	pos_y;
@@ -310,45 +313,26 @@ void	update(t_mlx *mlx, int key)
 	if (key == 1)
 		mlx->player.walk_direction = -1;
 }
-int	rotate_player(int key, t_mlx *mlx)
+int	rotate_player(t_mlx *mlx)
 {
-	if (key == 123 || key == 124)
-	{
+
 		mlx->player.rotat_angle += mlx->player.rot_speed * mlx->player.turn_direction;
-		while (mlx->player.rotat_angle < 0 ) {
+		while (mlx->player.rotat_angle < 0 ) 
 			mlx->player.rotat_angle += 2 * PI; 
-		}
-		while (mlx->player.rotat_angle >= 2 * PI ) {
+		while (mlx->player.rotat_angle >= 2 * PI ) 
 			mlx->player.rotat_angle-= 2 * M_PI; // Subtract 2π to bring it within range
-		}
-	}
 	return (0);
 }
-void	walk_player(t_mlx *mlx, int key)
+void	walk_player(t_mlx *mlx)
 {
-	
-	if (mlx->player.walk_direction != 0 && (key == 13 || key == 1))
-	{
-		mlx->player.x += cos(mlx->player.rotat_angle) * mlx->player.mov_speed * mlx->player.walk_direction;
-		mlx->player.y += sin(mlx->player.rotat_angle) * mlx->player.mov_speed * mlx->player.walk_direction;
-	}
+
+	mlx->player.x += cos(mlx->player.rotat_angle) * mlx->player.mov_speed * mlx->player.walk_direction;
+	mlx->player.y += sin(mlx->player.rotat_angle) * mlx->player.mov_speed * mlx->player.walk_direction;
 }
 int	move_player(int key, t_mlx *mlx)
 {
 	update(mlx, key);
-	if (mlx->player.turn_direction != 0)
-		rotate_player(key, mlx);
-    // while (mlx->player.rotat_angle >= 2 * PI ) {
-    //     mlx->player.rotat_angle-= 2 * M_PI; 
-    // }
-		
-	// }
-	if (mlx->player.walk_direction != 0)
-	{
-		if (!check_wall(mlx, key))
-			return (1);
-	walk_player(mlx, key);
-	}
+
 	// if (key == 13)
 	// 	move_up(mlx);
 	// if (key == 1)
@@ -397,9 +381,9 @@ void	init_player(t_mlx *mlx)
 	mlx->player.turn_direction = 0;
 	mlx->player.walk_direction = 0;
 	// draw_map_img(mlx->map, mlx);
-	mlx->player.rotat_angle = -90 * (PI / 180);
-	mlx->player.rot_speed = 4 * (PI / 180);
-	mlx->player.mov_speed = 12;
+	mlx->player.rotat_angle = 90 * (PI / 180);
+	mlx->player.rot_speed = 0.015;
+	mlx->player.mov_speed = 5.5;
 }
 void	init_rays_dir(t_mlx *mlx)
 {
@@ -421,7 +405,7 @@ int	main()
 {
 	char map[14][31] = {
 								{' ', ' ' , ' ' , ' ' , '1', '1' , '1' , '1' , '1' , '1' , '1' , '1' , '1', '1' , '1' , '1' , '1', '1' , '1' , '1' , '1' , '1' , '1' , '1' , '1' , '1' , '1' , '1' , '1' , '1', '1'} ,
-								{'1', '1' , '1' , '1' , '1', '0' , '0' , '0' , '0' , '0' , '0' , '0' , '1', '0' , '0' , '0' , '0', '0' , '1' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0', '1' } ,
+								{'1', '1' , '1' , '1' , '1', '0' , '0' , '0' , '0' , '0' , '0' , '0' , '1', '0' , '0' , '0' , '0', '0' , '1' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , 'N', '1' } ,
 								{'1', '0' , '0' , '0' , '0', '0' , '1' , '0' , '0' , '0' , '0' , '0' , '0', '0' , '0' , '0' , '0', '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0', '1' } ,
 								{'1', '0' , '0' , '0' , '0', '0' , '1' , '0' , '0' , '0' , '0' , '0' , '0', '0' , '0' , '0' , '0', '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0', '1' } ,
 								{'1', '0' , '0' , '0' , '0', '0' , '1' , '0' , '0' , '0' , '0' , '0' , '0', '0' , '0' , '0' , '0', '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0', '1' } ,
@@ -432,7 +416,7 @@ int	main()
 								{'1', '1' , '0' , '0' , '0', '0' , '1' , '0' , '0' , '0' , '0' , '0' , '1', '0' , '0' , '0' , '0', '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0', '1' } ,
 								{'1', '0' , '1' , '0' , '0', '0' , '1' , '0' , '1' , '1' , '1' , '1' , '0', '0' , '0' , '0' , '0', '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0', '1' } ,
 								{'1', '1' , '0' , '0' , '0', '0' , '1' , '0' , '1' , ' ' , ' ' , '1' , '1', '0' , '0' , '0' , '0', '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0', '1' } ,
-								{'1', '0' , '0' , 'N' , '0', '0' , '1' , '0' , '1' , ' ' , ' ' , '1' , '0', '0' , '0' , '0' , '0', '0' , '1' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0', '1' } ,
+								{'1', '0' , '0' , '0' , '0', '0' , '1' , '0' , '1' , ' ' , ' ' , '1' , '0', '0' , '0' , '0' , '0', '0' , '1' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0', '1' } ,
 								{'1', '1' , '1' , '1' , '1', '1' , '1' , '1' , '1' , ' ' , ' ' , '1' , '1', '1' , '1' , '1' , '1', '1' , '1' , '1' , '1' , '1' , '1' , '1' , '1' , '1' , '1' , '1' , '1' , '1', '1' }
 							};
 	t_mlx	*mlx;
@@ -466,8 +450,8 @@ int	main()
 		mlx->texture.img.data = mlx_get_data_addr(mlx->texture.img.img_ptr, &mlx->texture.img.bpp, &mlx->texture.img.size, &mlx->texture.img.endian);
 		f = 1;
 	}
-	mlx_hook(mlx->mlx_win, 02, 1L<<2, move_player, mlx);
 	mlx_hook(mlx->mlx_win, 03, 0, release, mlx);
+	mlx_hook(mlx->mlx_win, 02, 1L<<2, move_player, mlx);
 	mlx_loop_hook(mlx->mlx_init, render_map, mlx);
 	mlx_loop(mlx->mlx_init);
 	

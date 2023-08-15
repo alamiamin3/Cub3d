@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 19:00:25 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/11 21:59:43 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/15 16:41:28 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ void	get_horizontal_intersect(t_mlx *mlx, int i)
 	// {
     	mlx->rays[i].h_intersec_x = x_intersect;
     	mlx->rays[i].h_intersec_y = y_intersect ;
+    	mlx->rays[i].hit_x = x_intersect;
+    	mlx->rays[i].hit_y = y_intersect ;
 		// printf("dx = %f ; dy = %f\n", dx, dy);
 		float dy = ((y_intersect ) - mlx->player.y ) ;
 		float dx = ((x_intersect ) - mlx->player.x) ;
@@ -105,6 +107,8 @@ void    get_vertical_intersect(t_mlx *mlx, int i)
 			mlx->rays[i].hit_v = 1;
 			mlx->rays[i].hit_h = 0;
         	mlx->rays[i].dis = sqrt(dx * dx + dy * dy);
+			mlx->rays[i].hit_x = x_intersect;
+			mlx->rays[i].hit_y = y_intersect;
 		}
 	// printf("DIS FROM INTER %f\n", mlx->rays[i].dis);
 	// }
@@ -117,17 +121,14 @@ void    get_vertical_intersect(t_mlx *mlx, int i)
 }
 void    get_intersect_and_draw(t_mlx *mlx, int i)
 {
-	static int it;
 	mlx->rays[i].hit_h = 0;
 	mlx->rays[i].hit_v = 0;
 	
-	if (it == 0)
-   	{
+
 		get_horizontal_intersect(mlx, i);
 		
    	 	get_vertical_intersect(mlx, i);
 		// it = 1;
-	} 
-    
+
     // draw_ray_line(mlx, mlx->rays[i].ray_angle, mlx->player.x + 1, mlx->player.y + 1, i);
 }
