@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 09:49:09 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/15 20:49:50 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/16 23:30:10 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -356,7 +356,6 @@ void	get_player_pos(t_mlx *mlx)
 {
 	int	i;
 	int j;
-	printf("ddd\n");
 	i = 0;
 	while(i <14)
 	{
@@ -400,7 +399,57 @@ void	init_rays_dir(t_mlx *mlx)
 	}
 	
 }
+void	fill_text_arr(t_mlx *mlx)
+{
+	int color;
+	int	i = 0;
+	int x;
+	int y;
+	char *dst;
+	x = 0;
+	y = 0;
 
+	while (y < mlx->texture.h * mlx->texture.img.size)
+	{
+		x = 0;
+		while(x < mlx->texture.w)
+		{
+			dst = mlx->texture.img.data + (y  + x * ( mlx->texture.img.bpp / 8));
+			mlx->text_arr[i] = *(unsigned int*)dst;
+			i++;
+			x ++;
+		}
+		y += mlx->texture.img.size;
+	}
+}
+void	fill_textv_arr(t_mlx *mlx)
+{
+	int color;
+	int	i = 0;
+	int x;
+	int y;
+	char *dst;
+	x = 0;
+	y = 0;
+
+	while (y < mlx->texture_v.h * mlx->texture_v.img.size)
+	{
+		x = 0;
+		while(x < mlx->texture_v.w)
+		{
+			dst = mlx->texture_v.img.data + (y  + x * ( mlx->texture_v.img.bpp / 8));
+			mlx->text_v_arr[i] = *(unsigned int*)dst;
+			i++;
+			x ++;
+		}
+		y += mlx->texture_v.img.size;
+	}
+}
+int mouse_move(int key, t_mlx *mlx)
+{
+	printf("%d", key);
+	return (0);
+}
 int	main()
 {
 	char map[14][31] = {
@@ -410,7 +459,7 @@ int	main()
 								{'1', '0' , '0' , '0' , '0', '0' , '1' , '0' , '0' , '0' , '0' , '0' , '0', '0' , '0' , '0' , '0', '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0', '1' } ,
 								{'1', '0' , '0' , '0' , '0', '0' , '1' , '0' , '0' , '0' , '0' , '0' , '0', '0' , '0' , '0' , '0', '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0', '1' } ,
 								{'1', '0' , '0' , '0' , '0', '0' , '1' , '0' , '0' , '0' , '0' , '0' , '0', '0' , '0' , '0' , '0', '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0', '1' } ,
-								{'1', '0' , '0' , '0' , '0', '0' , '1' , '0' , '0' , '0' , '0' , '0' , '1', '0' , '0' , '0' , '0', '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0', '1' } ,
+								{'1', '0' , '0' , '0' , '0', '0' , '1' , '0' , '0' , '0' , '0' , '0' , '1', '0' , '0' , '0' , '0', '0' , '0' , '0' , '0' , '0' , '0' , '0' , '1' , '0' , '0' , '0' , '0' , '0', '1' } ,
 								{'1', '0' , '0' , '0' , '0', '0' , '0' , '0' , '0' , '0' , '0' , '0' , '1', '0' , '0' , '0' , '0', '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0', '1' } ,
 								{'1', '0' , '0' , '0' , '0', '0' , '1' , '0' , '0' , '0' , '0' , '0' , '0', '0' , '0' , '0' , '0', '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0', '1' } ,
 								{'1', '1' , '0' , '0' , '0', '0' , '1' , '0' , '0' , '0' , '0' , '0' , '1', '0' , '0' , '0' , '0', '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0', '1' } ,
@@ -439,17 +488,21 @@ int	main()
 	mlx->win_h = 14 * TILE_SIZE;
 	mlx->win_w = 31 * TILE_SIZE;
 	mlx->mlx_init = mlx_init();
-	if (f == 0)
-	{
+
 		mlx->mlx_win = mlx_new_window(mlx->mlx_init, mlx->win_w, mlx->win_h, "cub3d");
 		mlx->img.img_ptr = mlx_new_image(mlx->mlx_init, mlx->win_w, mlx->win_h);
 		mlx->img.data = mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size, &mlx->img.endian);
 		init_rays_dir(mlx);
-		mlx->texture.img.img_ptr = mlx_xpm_file_to_image(mlx->mlx_init, "./textures/walll.xpm", &mlx->texture.w, &mlx->texture.h);
-		printf("%d  %d\n", mlx->texture.w, mlx->texture.h);
+		mlx->texture.img.img_ptr = mlx_xpm_file_to_image(mlx->mlx_init, "./textures/greystone.xpm", &mlx->texture.w, &mlx->texture.h);
 		mlx->texture.img.data = mlx_get_data_addr(mlx->texture.img.img_ptr, &mlx->texture.img.bpp, &mlx->texture.img.size, &mlx->texture.img.endian);
-		f = 1;
-	}
+		mlx->texture_v.img.img_ptr = mlx_xpm_file_to_image(mlx->mlx_init, "./textures/eagle.xpm", &mlx->texture_v.w, &mlx->texture_v.h);
+		mlx->texture_v.img.data = mlx_get_data_addr(mlx->texture_v.img.img_ptr, &mlx->texture_v.img.bpp, &mlx->texture_v.img.size, &mlx->texture_v.img.endian);
+		mlx->text_arr = (int *)malloc(sizeof(int) * mlx->texture.w * mlx->texture.h);
+		mlx->text_v_arr = (int *)malloc(sizeof(int) * mlx->texture_v.w * mlx->texture_v.h);
+		fill_text_arr(mlx);
+		fill_textv_arr(mlx);
+	
+	mlx_hook(mlx->mlx_win, 06, 1L<<6, mouse_move, mlx);
 	mlx_hook(mlx->mlx_win, 03, 0, release, mlx);
 	mlx_hook(mlx->mlx_win, 02, 1L<<2, move_player, mlx);
 	mlx_loop_hook(mlx->mlx_init, render_map, mlx);

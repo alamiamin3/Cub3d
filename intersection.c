@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 19:00:25 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/15 16:41:28 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/16 21:38:38 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void	get_horizontal_intersect(t_mlx *mlx, int i)
 		float dx = ((x_intersect ) - mlx->player.x) ;
 		mlx->rays[i].dis =  sqrt(dx * dx + dy * dy);
 		mlx->rays[i].hit_h = 1;
+		mlx->rays[i].hit_v = 0;
 	// }
 	// else
 	// 	mlx->rays[i].dis =  0;

@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 09:49:16 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/15 18:21:38 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/16 23:42:37 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include <mlx.h>
 #include <math.h>
+#include <string.h>
 #define TILE_SIZE 64
 #define MAP_SCALE 0.2
 #define PI 3.141592
@@ -36,6 +37,7 @@ typedef struct s_ray
 	int	f_d;
 	float top_wall;
 	float bot_wall;
+	int	wall_height;
 	int hit_v;
 	int hit_h;
 }	t_ray;
@@ -71,6 +73,7 @@ typedef	struct  s_texture
 	int	h;
 	int	w;
 	int	text_offset;
+	
 }	t_texture;
 
 typedef	struct s_mlx
@@ -85,6 +88,9 @@ typedef	struct s_mlx
 	t_player player;
 	t_ray	*rays;
 	t_texture	texture;
+	t_texture	texture_v;
+	int	*text_arr;
+	int	*text_v_arr;
 }	t_mlx;
 
 
