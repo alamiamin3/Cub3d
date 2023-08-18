@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 22:10:27 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/17 19:34:51 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/18 18:42:54 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,96 +68,224 @@ void	render_floor(t_mlx *mlx)
 		i++;
 	}
 }
-int	get_vertical_texture_pixel(t_mlx *mlx, float top, float bot)
-{
-	static int x_t;
-	static int check;
-	static int y_t;
-	char	*dst;
-	int	color ;
+// int	get_vertical_texture_pixel(t_mlx *mlx, float top, float bot)
+// {
+// 	static int x_t;
+// 	static int check;
+// 	static int y_t;
+// 	char	*dst;
+// 	int	color ;
 	
-	if (bot - top > TILE_SIZE)
-		return (0xD8D8D8);
-	if (check > TILE_SIZE)
+// 	if (bot - top > TILE_SIZE)
+// 		return (0xD8D8D8);
+// 	if (check > TILE_SIZE)
+// 	{
+// 		y_t = 0;
+// 		check = 0;
+// 		// x_t ++;
+// 		// if (x_t > TILE_SIZE)
+// 		// 	x_t = 0;
+// 	}
+
+// 		dst = mlx->texture.img.data + y_t + mlx->texture.text_offset * (mlx->texture.img.bpp / 8);
+// 		color = *(unsigned int *)dst;
+// 		// printf("TEXT[X] = %d  | TEXT[Y] = %d \n", mlx->texture.text_offset * (mlx->texture.img.bpp / 8), y_t );
+// 		// if (y_t == mlx->texture.img.size)
+// 		// 	exit (0);
+// 		y_t += mlx->texture.img.size ;
+// 		check ++;
+// 	return (color);
+// }
+// void	draw_vertical_texture(t_mlx *mlx, int wall_top,  int wall_bot, int i)
+// {
+// 	float dx;	
+// 	float dy;
+// 	int	y_off = 0;
+// 	char *dst;
+// 	int color;
+// 	float x_inc;	
+// 	float y_inc;
+// 	int step;
+// 	int j = 0;
+// 	int	y = wall_top;
+// 	step = abs(wall_bot - wall_top);
+// 	// printf("wall top = %d | wall_bot %d |  wall heghit = %d   step = %d\n", wall_top, wall_bot, mlx->rays[i].wall_height, step);
+// 	// exit (0);
+// 	x_inc = 0;
+// 	y_inc = (wall_bot - wall_top) / step ;
+// 	while (j < step)
+// 	{
+// 		int dis_from_top = y + (mlx->rays[i].wall_height / 2) - (mlx->win_h / 2);
+// 		// dst = mlx->texture.img.data + y_off  + mlx->texture.text_offset * 4;
+// 		y_off = dis_from_top * ((float)mlx->texture_v.h / mlx->rays[i].wall_height);
+// 		color = mlx->text_v_arr[y_off * mlx->texture_v.w + mlx->texture_v.text_offset];
+// 		// color = *(int *)dst;
+		
+// 		my_mlx_pixel_put(mlx, i, wall_top, color);
+// 		wall_top += 1;
+// 		y++;
+// 		j++;
+// 	}
+// }
+// void	draw_horizontal_texture(t_mlx *mlx, int wall_top,  int wall_bot, int i)
+// {
+// 	float dx;	
+// 	float dy;
+// 	int	y_off = 0;
+// 	char *dst;
+// 	int color;
+// 	float x_inc;	
+// 	float y_inc;
+// 	int step;
+// 	int j = 0;
+// 	int	y = wall_top;
+// 	step = abs(wall_bot - wall_top);
+// 	// printf("wall top = %d | wall_bot %d |  wall heghit = %d   step = %d\n", wall_top, wall_bot, mlx->rays[i].wall_height, step);
+// 	// exit (0);
+// 	x_inc = 0;
+// 	y_inc = (wall_bot - wall_top) / step ;
+// 	while (j < step)
+// 	{
+// 		int dis_from_top = y + (mlx->rays[i].wall_height / 2) - (mlx->win_h / 2);
+// 		// dst = mlx->texture.img.data + y_off  + mlx->texture.text_offset * 4;
+// 		y_off = dis_from_top * ((float)mlx->texture.h  / mlx->rays[i].wall_height);
+// 		color = mlx->text_arr[y_off * mlx->texture.w + mlx->texture.text_offset];
+// 		// color = *(int *)dst;
+		
+// 		my_mlx_pixel_put(mlx, i, wall_top, color);
+// 		wall_top += 1;
+// 		y++;
+// 		j++;
+// 	}
+// }
+void	draw_north_text(t_mlx *mlx, int wall_top,  int wall_bot, int i, int *text_arr)
+{
+	float dx;	
+	float dy;
+	int	y_off = 0;
+	char *dst;
+	int color;
+	float x_inc;	
+	float y_inc;
+	int step;
+	int j = 0;
+	int	y = wall_top;
+	step = abs(wall_bot - wall_top);
+	// printf("wall top = %d | wall_bot %d |  wall heghit = %d   step = %d\n", wall_top, wall_bot, mlx->rays[i].wall_height, step);
+	// exit (0);
+	x_inc = 0;
+	y_inc = (wall_bot - wall_top) / step ;
+	while (j < step)
 	{
-		y_t = 0;
-		check = 0;
-		// x_t ++;
-		// if (x_t > TILE_SIZE)
-		// 	x_t = 0;
+		int dis_from_top = y + (mlx->rays[i].wall_height / 2) - (mlx->win_h / 2);
+		// dst = mlx->texture.img.data + y_off  + mlx->texture.text_offset * 4;
+		y_off = dis_from_top * ((float)mlx->text_n.h  / mlx->rays[i].wall_height);
+		color = text_arr[y_off * mlx->text_n.w + mlx->text_n.text_offset];
+		// color = *(int *)dst;
+		
+		my_mlx_pixel_put(mlx, i, wall_top, color);
+		wall_top += 1;
+		y++;
+		j++;
+	}
+}
+void	draw_south_text(t_mlx *mlx, int wall_top,  int wall_bot, int i, int *text_arr)
+{
+	float dx;	
+	float dy;
+	int	y_off = 0;
+	char *dst;
+	int color;
+	float x_inc;	
+	float y_inc;
+	int step;
+	int j = 0;
+	int	y = wall_top;
+	step = abs(wall_bot - wall_top);
+	// printf("wall top = %d | wall_bot %d |  wall heghit = %d   step = %d\n", wall_top, wall_bot, mlx->rays[i].wall_height, step);
+	// exit (0);
+	x_inc = 0;
+	y_inc = (wall_bot - wall_top) / step ;
+	while (j < step)
+	{
+		int dis_from_top = y + (mlx->rays[i].wall_height / 2) - (mlx->win_h / 2);
+		// dst = mlx->texture.img.data + y_off  + mlx->texture.text_offset * 4;
+		y_off = dis_from_top * ((float)mlx->text_s.h  / mlx->rays[i].wall_height);
+		color = text_arr[y_off * mlx->text_s.w + mlx->text_s.text_offset];
+		// color = *(int *)dst;
+		
+		my_mlx_pixel_put(mlx, i, wall_top, color);
+		wall_top += 1;
+		y++;
+		j++;
+	}
+}
+
+void	draw_east_text(t_mlx *mlx, int wall_top,  int wall_bot, int i, int *text_arr)
+{
+	float dx;	
+	float dy;
+	int	y_off = 0;
+	char *dst;
+	int color;
+	float x_inc;	
+	float y_inc;
+	int step;
+	int j = 0;
+	int	y = wall_top;
+	step = abs(wall_bot - wall_top);
+	// printf("wall top = %d | wall_bot %d |  wall heghit = %d   step = %d\n", wall_top, wall_bot, mlx->rays[i].wall_height, step);
+	// exit (0);
+	x_inc = 0;
+	y_inc = (wall_bot - wall_top) / step ;
+	while (j < step)
+	{
+		int dis_from_top = y + (mlx->rays[i].wall_height / 2) - (mlx->win_h / 2);
+		// dst = mlx->texture.img.data + y_off  + mlx->texture.text_offset * 4;
+		y_off = dis_from_top * ((float)mlx->text_e.h  / mlx->rays[i].wall_height);
+		color = text_arr[y_off * mlx->text_e.w + mlx->text_e.text_offset];
+		// color = *(int *)dst;
+		
+		my_mlx_pixel_put(mlx, i, wall_top, color);
+		wall_top += 1;
+		y++;
+		j++;
+	}
+}
+
+void	draw_west_text(t_mlx *mlx, int wall_top,  int wall_bot, int i, int *text_arr)
+{
+	float dx;	
+	float dy;
+	int	y_off = 0;
+	char *dst;
+	int color;
+	float x_inc;	
+	float y_inc;
+	int step;
+	int j = 0;
+	int	y = wall_top;
+	step = abs(wall_bot - wall_top);
+	// printf("wall top = %d | wall_bot %d |  wall heghit = %d   step = %d\n", wall_top, wall_bot, mlx->rays[i].wall_height, step);
+	// exit (0);
+	x_inc = 0;
+	y_inc = (wall_bot - wall_top) / step ;
+	while (j < step)
+	{
+		int dis_from_top = y + (mlx->rays[i].wall_height / 2) - (mlx->win_h / 2);
+		// dst = mlx->texture.img.data + y_off  + mlx->texture.text_offset * 4;
+		y_off = dis_from_top * ((float)mlx->text_w.h  / mlx->rays[i].wall_height);
+		color = text_arr[y_off * mlx->text_w.w + mlx->text_w.text_offset];
+		// color = *(int *)dst;
+		
+		my_mlx_pixel_put(mlx, i, wall_top, color);
+		wall_top += 1;
+		y++;
+		j++;
 	}
 
-		dst = mlx->texture.img.data + y_t + mlx->texture.text_offset * (mlx->texture.img.bpp / 8);
-		color = *(unsigned int *)dst;
-		// printf("TEXT[X] = %d  | TEXT[Y] = %d \n", mlx->texture.text_offset * (mlx->texture.img.bpp / 8), y_t );
-		// if (y_t == mlx->texture.img.size)
-		// 	exit (0);
-		y_t += mlx->texture.img.size ;
-		check ++;
-	return (color);
 }
-void	draw_vertical_texture(t_mlx *mlx, int wall_top,  int wall_bot, int i)
-{
-	float dx;	
-	float dy;
-	int	y_off = 0;
-	char *dst;
-	int color;
-	float x_inc;	
-	float y_inc;
-	int step;
-	int j = 0;
-	int	y = wall_top;
-	step = abs(wall_bot - wall_top);
-	// printf("wall top = %d | wall_bot %d |  wall heghit = %d   step = %d\n", wall_top, wall_bot, mlx->rays[i].wall_height, step);
-	// exit (0);
-	x_inc = 0;
-	y_inc = (wall_bot - wall_top) / step ;
-	while (j < step)
-	{
-		int dis_from_top = y + (mlx->rays[i].wall_height / 2) - (mlx->win_h / 2);
-		// dst = mlx->texture.img.data + y_off  + mlx->texture.text_offset * 4;
-		y_off = dis_from_top * ((float)mlx->texture_v.h / mlx->rays[i].wall_height);
-		color = mlx->text_v_arr[y_off * mlx->texture_v.w + mlx->texture_v.text_offset];
-		// color = *(int *)dst;
-		
-		my_mlx_pixel_put(mlx, i, wall_top, color);
-		wall_top += 1;
-		y++;
-		j++;
-	}
-}
-void	draw_horizontal_texture(t_mlx *mlx, int wall_top,  int wall_bot, int i)
-{
-	float dx;	
-	float dy;
-	int	y_off = 0;
-	char *dst;
-	int color;
-	float x_inc;	
-	float y_inc;
-	int step;
-	int j = 0;
-	int	y = wall_top;
-	step = abs(wall_bot - wall_top);
-	// printf("wall top = %d | wall_bot %d |  wall heghit = %d   step = %d\n", wall_top, wall_bot, mlx->rays[i].wall_height, step);
-	// exit (0);
-	x_inc = 0;
-	y_inc = (wall_bot - wall_top) / step ;
-	while (j < step)
-	{
-		int dis_from_top = y + (mlx->rays[i].wall_height / 2) - (mlx->win_h / 2);
-		// dst = mlx->texture.img.data + y_off  + mlx->texture.text_offset * 4;
-		y_off = dis_from_top * ((float)mlx->texture.h  / mlx->rays[i].wall_height);
-		color = mlx->text_arr[y_off * mlx->texture.w + mlx->texture.text_offset];
-		// color = *(int *)dst;
-		
-		my_mlx_pixel_put(mlx, i, wall_top, color);
-		wall_top += 1;
-		y++;
-		j++;
-	}
-}
+
 void	render_walls(t_mlx *mlx)
 { 
 	int i;
@@ -171,19 +299,30 @@ void	render_walls(t_mlx *mlx)
 	{
 		if (mlx->rays[i].hit_h)
 		{
-
-        	// draw_project(mlx, i, mlx->rays[i].top_wall, mlx->rays[i].bot_wall, color_h);
-			// color_h = get_vertical_texture_pixel(mlx);
-			mlx->texture.text_offset = (int)fmod(mlx->rays[i].hit_x , TILE_SIZE);
-			draw_horizontal_texture(mlx, (int)mlx->rays[i].top_wall, (int)mlx->rays[i].bot_wall, i);
+			if (mlx->rays[i].f_u)
+			{
+				mlx->text_n.text_offset = (int)fmod(mlx->rays[i].hit_x , TILE_SIZE);
+				draw_north_text(mlx, (int)mlx->rays[i].top_wall, (int)mlx->rays[i].bot_wall, i, mlx->text_n_arr);
+			}
+			else
+			{
+				mlx->text_s.text_offset = (int)fmod(mlx->rays[i].hit_x , TILE_SIZE);
+				draw_south_text(mlx, (int)mlx->rays[i].top_wall, (int)mlx->rays[i].bot_wall, i, mlx->text_s_arr);
+			}
+				
 		}
 		else
 		{
-			// color_v = get_vertical_texture_pixel(mlx);
-			// draw_vertical_texture(mlx, i, mlx->rays[i].top_wall, mlx->rays[i].bot_wall);
-			mlx->texture_v.text_offset = (int)fmod(mlx->rays[i].hit_y ,TILE_SIZE);
-			draw_vertical_texture(mlx, (int)mlx->rays[i].top_wall, (int)mlx->rays[i].bot_wall, i);
-        	// draw_project(mlx, i, mlx->rays[i].top_wall, mlx->rays[i].bot_wall, color_v);
+			if (mlx->rays[i].f_r)
+			{
+				mlx->text_e.text_offset = (int)fmod(mlx->rays[i].hit_y ,TILE_SIZE);
+				draw_east_text(mlx, (int)mlx->rays[i].top_wall, (int)mlx->rays[i].bot_wall, i, mlx->text_e_arr);
+			}
+			else
+			{
+				mlx->text_w.text_offset = (int)fmod(mlx->rays[i].hit_y ,TILE_SIZE);
+				draw_west_text(mlx, (int)mlx->rays[i].top_wall, (int)mlx->rays[i].bot_wall, i, mlx->text_w_arr);
+			}
 		}
 			// printf("proj = %f\n", mlx->rays[i].bot_wall - mlx->rays[i].top_wall );
 		i++;

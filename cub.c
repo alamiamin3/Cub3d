@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 09:49:09 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/17 17:17:30 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/18 18:45:15 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ int	release(int key, t_mlx *mlx)
 	return (0);	
 }
 
-void	fill_text_arr(t_mlx *mlx)
+void	fill_text_arr(t_mlx *mlx, t_texture *text, int *text_arr)
 {
 	int color;
 	int	i = 0;
@@ -125,43 +125,43 @@ void	fill_text_arr(t_mlx *mlx)
 	char *dst;
 	x = 0;
 	y = 0;
-
-	while (y < mlx->texture.h * mlx->texture.img.size)
+	// text_arr = (int *)malloc(sizeof(int) * text->w * text->h);
+	while (y < text->h * text->img.size)
 	{
 		x = 0;
-		while(x < mlx->texture.w)
+		while(x < text->w)
 		{
-			dst = mlx->texture.img.data + (y  + x * ( mlx->texture.img.bpp / 8));
-			mlx->text_arr[i] = *(unsigned int*)dst;
+			dst = text->img.data + (y  + x * ( text->img.bpp / 8));
+			text_arr[i] = *(unsigned int*)dst;
 			i++;
 			x ++;
 		}
-		y += mlx->texture.img.size;
+		y += text->img.size;
 	}
 }
-void	fill_textv_arr(t_mlx *mlx)
-{
-	int color;
-	int	i = 0;
-	int x;
-	int y;
-	char *dst;
-	x = 0;
-	y = 0;
+// void	fill_textv_arr(t_mlx *mlx)
+// {
+// 	int color;
+// 	int	i = 0;
+// 	int x;
+// 	int y;
+// 	char *dst;
+// 	x = 0;
+// 	y = 0;
 
-	while (y < mlx->texture_v.h * mlx->texture_v.img.size)
-	{
-		x = 0;
-		while(x < mlx->texture_v.w)
-		{
-			dst = mlx->texture_v.img.data + (y  + x * ( mlx->texture_v.img.bpp / 8));
-			mlx->text_v_arr[i] = *(unsigned int*)dst;
-			i++;
-			x ++;
-		}
-		y += mlx->texture_v.img.size;
-	}
-}
+// 	while (y < mlx->texture_v.h * mlx->texture_v.img.size)
+// 	{
+// 		x = 0;
+// 		while(x < mlx->texture_v.w)
+// 		{
+// 			dst = mlx->texture_v.img.data + (y  + x * ( mlx->texture_v.img.bpp / 8));
+// 			mlx->text_v_arr[i] = *(unsigned int*)dst;
+// 			i++;
+// 			x ++;
+// 		}
+// 		y += mlx->texture_v.img.size;
+// 	}
+// }
 int mouse_move(int key, t_mlx *mlx)
 {
 	printf("%d", key);
@@ -211,14 +211,27 @@ int	main()
 		mlx->img.img_ptr = mlx_new_image(mlx->mlx_init, mlx->win_w, mlx->win_h);
 		mlx->img.data = mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size, &mlx->img.endian);
 		init_rays_dir(mlx);
-		mlx->texture.img.img_ptr = mlx_xpm_file_to_image(mlx->mlx_init, "./textures/greystone.xpm", &mlx->texture.w, &mlx->texture.h);
-		mlx->texture.img.data = mlx_get_data_addr(mlx->texture.img.img_ptr, &mlx->texture.img.bpp, &mlx->texture.img.size, &mlx->texture.img.endian);
-		mlx->texture_v.img.img_ptr = mlx_xpm_file_to_image(mlx->mlx_init, "./textures/bluestone.xpm", &mlx->texture_v.w, &mlx->texture_v.h);
-		mlx->texture_v.img.data = mlx_get_data_addr(mlx->texture_v.img.img_ptr, &mlx->texture_v.img.bpp, &mlx->texture_v.img.size, &mlx->texture_v.img.endian);
-		mlx->text_arr = (int *)malloc(sizeof(int) * mlx->texture.w * mlx->texture.h);
-		mlx->text_v_arr = (int *)malloc(sizeof(int) * mlx->texture_v.w * mlx->texture_v.h);
-		fill_text_arr(mlx);
-		fill_textv_arr(mlx);
+		//N
+		mlx->text_n.img.img_ptr = mlx_xpm_file_to_image(mlx->mlx_init, "./textures/greystone.xpm", &mlx->text_n.w, &mlx->text_n.h);
+		mlx->text_n.img.data = mlx_get_data_addr(mlx->text_n.img.img_ptr, &mlx->text_n.img.bpp, &mlx->text_n.img.size, &mlx->text_n.img.endian);
+		//S
+		mlx->text_s.img.img_ptr = mlx_xpm_file_to_image(mlx->mlx_init, "./textures/eagle.xpm", &mlx->text_s.w, &mlx->text_s.h);
+		mlx->text_s.img.data = mlx_get_data_addr(mlx->text_s.img.img_ptr, &mlx->text_s.img.bpp, &mlx->text_s.img.size, &mlx->text_s.img.endian);
+		//E
+		mlx->text_e.img.img_ptr = mlx_xpm_file_to_image(mlx->mlx_init, "./textures/redbrick.xpm", &mlx->text_e.w, &mlx->text_e.h);
+		mlx->text_e.img.data = mlx_get_data_addr(mlx->text_e.img.img_ptr, &mlx->text_e.img.bpp, &mlx->text_e.img.size, &mlx->text_e.img.endian);
+		//W
+		mlx->text_w.img.img_ptr = mlx_xpm_file_to_image(mlx->mlx_init, "./textures/bluestone.xpm", &mlx->text_w.w, &mlx->text_w.h);
+		mlx->text_w.img.data = mlx_get_data_addr(mlx->text_w.img.img_ptr, &mlx->text_w.img.bpp, &mlx->text_w.img.size, &mlx->text_w.img.endian);
+		
+		mlx->text_n_arr = (int *)malloc(sizeof(int) * mlx->text_n.w * mlx->text_n.h);
+		mlx->text_s_arr = (int *)malloc(sizeof(int) * mlx->text_s.w * mlx->text_s.h);
+		mlx->text_e_arr = (int *)malloc(sizeof(int) * mlx->text_e.w * mlx->text_e.h);
+		mlx->text_w_arr = (int *)malloc(sizeof(int) * mlx->text_w.w * mlx->text_w.h);
+		fill_text_arr(mlx, &mlx->text_n, mlx->text_n_arr);
+		fill_text_arr(mlx, &mlx->text_s, mlx->text_s_arr);
+		fill_text_arr(mlx, &mlx->text_e, mlx->text_e_arr);
+		fill_text_arr(mlx, &mlx->text_w, mlx->text_w_arr);
 		
 	}
 	

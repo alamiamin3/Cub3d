@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 09:49:16 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/17 17:51:05 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/18 18:28:05 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,10 +91,14 @@ typedef struct s_mlx
 	t_img		m_map;
 	t_player	player;
 	t_ray		*rays;
-	t_texture	texture;
-	t_texture	texture_v;
-	int			*text_arr;
-	int			*text_v_arr;
+	t_texture	text_n;
+	t_texture	text_s;
+	t_texture	text_e;
+	t_texture	text_w;
+	int			*text_n_arr;
+	int			*text_s_arr;
+	int			*text_e_arr;
+	int			*text_w_arr;
 }				t_mlx;
 
 typedef struct s_game
@@ -133,4 +137,9 @@ void			draw_map_img(char **map,  t_mlx *mlx);
 void			draw_minimap_elm(t_mlx *mlx, int elm, int i, int j);
 int				draw_player(t_mlx *mlx);
 void    		draw_pixels_line(t_mlx *mlx, float dx, float dy);
+int	is_boundries_hited(t_mlx *mlx, float x_inter, float y_inter);
+int	is_wall_hitted(t_mlx *mlx, float x_inter, float y_inter, int i);
+void	get_first_intersection(t_mlx *mlx, float *xi, float *yi, int i);
+void	save_distance(t_mlx *mlx, float xi, float yi, int i);
+
 #endif
