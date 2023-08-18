@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 09:49:09 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/18 18:45:15 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/18 21:56:02 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,9 @@ int	check_wall(t_mlx *mlx)
 	int	pos_y;
 	if (mlx->player.walk_direction != 0)
 	{
+		printf("t : %d w : %d\n", mlx->player.turn_direction, mlx->player.walk_direction);
 		pos_x = (mlx->player.x + ((cos(mlx->player.rotat_angle) * mlx->player.mov_speed) * mlx->player.walk_direction)) / TILE_SIZE;
-		pos_y = (mlx->player.y + ((sin(mlx->player.rotat_angle) * mlx->player.mov_speed) * mlx->player.walk_direction)) / TILE_SIZE;
+		pos_y = (mlx->player.y+ ((sin(mlx->player.rotat_angle) * mlx->player.mov_speed) * mlx->player.walk_direction)) / TILE_SIZE;
 		if (mlx->map[pos_y][pos_x] == '1')
 			return (0);
 	}
@@ -223,6 +224,8 @@ int	main()
 		//W
 		mlx->text_w.img.img_ptr = mlx_xpm_file_to_image(mlx->mlx_init, "./textures/bluestone.xpm", &mlx->text_w.w, &mlx->text_w.h);
 		mlx->text_w.img.data = mlx_get_data_addr(mlx->text_w.img.img_ptr, &mlx->text_w.img.bpp, &mlx->text_w.img.size, &mlx->text_w.img.endian);
+		
+		//player image
 		
 		mlx->text_n_arr = (int *)malloc(sizeof(int) * mlx->text_n.w * mlx->text_n.h);
 		mlx->text_s_arr = (int *)malloc(sizeof(int) * mlx->text_s.w * mlx->text_s.h);
