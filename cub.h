@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 09:49:16 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/18 21:01:37 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/19 15:03:58 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ void			draw_line(t_mlx *mlx, float angle, float x1, float y1);
 void			draw_ray_line(t_mlx *mlx, float x1, float y1,
 					int j);
 void			render_projection(t_mlx *mlx);
-void			draw_project(t_mlx *mlx, float x1, float y1, float wall_height,
+void			draw_project(t_mlx *mlx, float x1, float y1, float y2,
 					int color);
 void			my_mlx_pixel_put(t_mlx *mlx, int x, int y, int color);
 void			render_walls(t_mlx *mlx);
@@ -141,5 +141,7 @@ int	is_boundries_hited(t_mlx *mlx, float x_inter, float y_inter);
 int	is_wall_hitted(t_mlx *mlx, float x_inter, float y_inter, int i);
 void	get_first_intersection(t_mlx *mlx, float *xi, float *yi, int i);
 void	save_distance(t_mlx *mlx, float xi, float yi, int i);
+void	render_walls(t_mlx *mlx);
+void	draw_based_on_direction(t_mlx *mlx, int i, char dir);
 
 #endif

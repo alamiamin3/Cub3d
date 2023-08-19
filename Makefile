@@ -1,7 +1,8 @@
 NAME = cub3d
 
 
-SOURCES = cub.c intersection.c wall_render.c ray_casting.c ray_casting_utils.c player.c render_mini_map.c intersection_utils.c
+SOURCES = cub.c intersection.c wall_render.c ray_casting.c ray_casting_utils.c player.c render_mini_map.c intersection_utils.c render_elements.c wall_render_utils.c
+
 
 
 OBJ = $(SOURCES:.c=.o)

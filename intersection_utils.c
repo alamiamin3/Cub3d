@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 19:22:10 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/17 19:26:37 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/19 14:22:37 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,11 @@
 
 int	is_boundries_hited(t_mlx *mlx, float x_inter, float y_inter)
 {
-	if ((int)y_inter / TILE_SIZE < 0 || (int)y_inter / TILE_SIZE >= mlx->win_h / TILE_SIZE)
+	if ((int)y_inter / TILE_SIZE < 0 || (int)y_inter / TILE_SIZE >= mlx->win_h
+		/ TILE_SIZE)
 		return (1);
-	if ((int)x_inter / TILE_SIZE < 0 || (int)x_inter / TILE_SIZE >= mlx->win_w / TILE_SIZE)
+	if ((int)x_inter / TILE_SIZE < 0 || (int)x_inter / TILE_SIZE >= mlx->win_w
+		/ TILE_SIZE)
 		return (1);
 	else
 		return (0);
@@ -55,30 +57,33 @@ void	get_first_intersection(t_mlx *mlx, float *xi, float *yi, int i)
 		*yi = floor(mlx->player.y / TILE_SIZE) * TILE_SIZE;
 		if (mlx->rays[i].f_d)
 			*yi += TILE_SIZE;
-		*xi = mlx->player.x + ((*yi - mlx->player.y ) / tan(mlx->rays[i].ray_angle));
+		*xi = mlx->player.x + ((*yi - mlx->player.y)
+				/ tan(mlx->rays[i].ray_angle));
 	}
 	else
 	{
 		*xi = floor(mlx->player.x / TILE_SIZE) * TILE_SIZE;
 		if (mlx->rays[i].f_r)
 			*xi += TILE_SIZE;
-		*yi = (mlx->player.y + ((*xi - mlx->player.x) * tan(mlx->rays[i].ray_angle)));
+		*yi = (mlx->player.y + ((*xi - mlx->player.x)
+					* tan(mlx->rays[i].ray_angle)));
 	}
 }
+
 void	save_distance(t_mlx *mlx, float xi, float yi, int i)
 {
 	float	dx;
-	float dy;
+	float	dy;
 
 	dy = yi - mlx->player.y;
-	dx = xi- mlx->player.x;
+	dx = xi - mlx->player.x;
 	if (mlx->rays[i].inter == 0)
 	{
 		mlx->rays[i].hit_x = xi;
-   	mlx->rays[i].hit_y = yi;
-		mlx->rays[i].dis =  sqrt(dx * dx + dy * dy);
+		mlx->rays[i].hit_y = yi;
+		mlx->rays[i].dis = sqrt(dx * dx + dy * dy);
 		mlx->rays[i].hit_h = 1;
-		mlx->rays[i].hit_v = 0;	
+		mlx->rays[i].hit_v = 0;
 	}
 	else
 	{
@@ -86,10 +91,9 @@ void	save_distance(t_mlx *mlx, float xi, float yi, int i)
 		{
 			mlx->rays[i].hit_v = 1;
 			mlx->rays[i].hit_h = 0;
-        	mlx->rays[i].dis = sqrt(dx * dx + dy * dy);
+			mlx->rays[i].dis = sqrt(dx * dx + dy * dy);
 			mlx->rays[i].hit_x = xi;
 			mlx->rays[i].hit_y = yi;
 		}
 	}
 }
-

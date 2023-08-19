@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 09:49:09 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/18 21:56:02 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/19 16:58:01 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,48 +20,42 @@ void	my_mlx_pixel_put(t_mlx *mlx, int x, int y, int color)
 	dst = mlx->img.data + (y * mlx->img.size + x * (mlx->img.bpp / 8));
 	*(unsigned int*)dst = color;
 }
-void	draw_line(t_mlx *mlx, float angle, float x1, float y1)
-{
-	float dx;
-	float dy;
-	float x2;
-	float y2;
+// void	draw_line(t_mlx *mlx, float angle, float x1, float y1)
+// {
+// 	float dx;
+// 	float dy;
+// 	float x2;
+// 	float y2;
 	
-	int step;
-	float x_inc;
-	float y_inc;
-	int i;
+// 	int step;
+// 	float x_inc;
+// 	float y_inc;
+// 	int i;
 
-	i = 0;
-	x2 = x1 + cos(angle) * 20 ;
-	y2 = y1 + sin(angle) * 20;
-	dx = x2 - (mlx->player.x * MAP_SCALE);
-	dy = y2 - (mlx->player.y * MAP_SCALE);
-	if (fabs(dx) > fabs(dy))
-		step = fabs(dx);
-	else
-		step = fabs(dy);
-	x_inc = dx / step;
-	y_inc = dy / step;
-	while (i < step)
-	{
-		my_mlx_pixel_put(mlx,x1, y1, 0xF93308);
-		x1 += x_inc;
-		y1 += y_inc;
-		i++;
-	}
-}
+// 	i = 0;
+// 	x2 = x1 + cos(angle) * 20 ;
+// 	y2 = y1 + sin(angle) * 20;
+// 	dx = x2 - (mlx->player.x * MAP_SCALE);
+// 	dy = y2 - (mlx->player.y * MAP_SCALE);
+// 	if (fabs(dx) > fabs(dy))
+// 		step = fabs(dx);
+// 	else
+// 		step = fabs(dy);
+// 	x_inc = dx / step;
+// 	y_inc = dy / step;
+// 	while (i < step)
+// 	{
+// 		my_mlx_pixel_put(mlx,x1, y1, 0xF93308);
+// 		x1 += x_inc;
+// 		y1 += y_inc;
+// 		i++;
+// 	}
+// }
 
 int	render_map(t_mlx *mlx)
 {
-	// mlx_clear_window(mlx->mlx_init, mlx->mlx_win);
-		if (mlx->player.turn_direction != 0)
+	if (mlx->player.turn_direction != 0)
 		rotate_player(mlx);
-    // while (mlx->player.rotat_angle >= 2 * PI ) {
-    //     mlx->player.rotat_angle-= 2 * M_PI; 
-    // }
-		
-	// }
 	if (mlx->player.walk_direction != 0)
 	{
 		if (check_wall(mlx))
@@ -99,9 +93,8 @@ int	check_wall(t_mlx *mlx)
 	int	pos_y;
 	if (mlx->player.walk_direction != 0)
 	{
-		printf("t : %d w : %d\n", mlx->player.turn_direction, mlx->player.walk_direction);
-		pos_x = (mlx->player.x + ((cos(mlx->player.rotat_angle) * mlx->player.mov_speed) * mlx->player.walk_direction)) / TILE_SIZE;
-		pos_y = (mlx->player.y+ ((sin(mlx->player.rotat_angle) * mlx->player.mov_speed) * mlx->player.walk_direction)) / TILE_SIZE;
+		pos_x = (mlx->player.x + ((cos(mlx->player.rotat_angle) * mlx->player.mov_speed * 5) * mlx->player.walk_direction)) / TILE_SIZE;
+		pos_y = (mlx->player.y+ ((sin(mlx->player.rotat_angle) * mlx->player.mov_speed * 5) * mlx->player.walk_direction)) / TILE_SIZE;
 		if (mlx->map[pos_y][pos_x] == '1')
 			return (0);
 	}
@@ -126,7 +119,6 @@ void	fill_text_arr(t_mlx *mlx, t_texture *text, int *text_arr)
 	char *dst;
 	x = 0;
 	y = 0;
-	// text_arr = (int *)malloc(sizeof(int) * text->w * text->h);
 	while (y < text->h * text->img.size)
 	{
 		x = 0;
@@ -163,9 +155,29 @@ void	fill_text_arr(t_mlx *mlx, t_texture *text, int *text_arr)
 // 		y += mlx->texture_v.img.size;
 // 	}
 // }
-int mouse_move(int key, t_mlx *mlx)
+int mouse_move(int x, int y, t_mlx *mlx)
 {
-	printf("%d", key);
+	static int x_s;
+	static int y_s;
+	static int i;
+
+	if (x_s == x && y_s == y)
+		return (0);
+	else 
+	{
+		x_s = x;
+		y_s = y;
+		if ((int)mlx->player.x < x_s )
+			mlx->player.rotat_angle -= 1 * (PI / 180);
+		else if ((int)mlx->player.x > x_s)
+			mlx->player.rotat_angle += 1 * (PI / 180);
+		while (mlx->player.rotat_angle < 0)
+			mlx->player.rotat_angle += 2 * PI;
+		while (mlx->player.rotat_angle >= 2 * PI)
+			mlx->player.rotat_angle -= 2 * M_PI;
+	}
+	printf("x = %d y = %d    PLAYER_X = %f   PLAYER_Y = %f\n", x, y, mlx->player.x, mlx->player.y);
+
 	return (0);
 }
 int	main()
@@ -238,7 +250,7 @@ int	main()
 		
 	}
 	
-	mlx_hook(mlx->mlx_win, 06, 1L<<6, mouse_move, mlx);
+	// mlx_hook(mlx->mlx_win, 06, 0, mouse_move, mlx);
 	mlx_hook(mlx->mlx_win, 03, 0, release, mlx);
 	mlx_hook(mlx->mlx_win, 02, 1L<<2, move_player, mlx);
 	mlx_loop_hook(mlx->mlx_init, render_map, mlx);
