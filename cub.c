@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 09:49:09 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/19 16:58:01 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/20 13:56:59 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,31 @@ int mouse_move(int x, int y, t_mlx *mlx)
 
 	return (0);
 }
+void	leak()
+{
+	system("leaks cub3d");
+}
+void	free_map(t_mlx *mlx)
+{
+	int i = 0;
+	int j = 0;
+
+	while (i < 14)
+	{
+		free(mlx->map[i]);
+		i++;
+	}
+	free(mlx->map);
+}
+int	ft_exit(t_mlx *mlx)
+{
+	free(mlx->rays);
+	free_map(mlx);
+	mlx_destroy_window(mlx->mlx_init, mlx->mlx_win);
+	free(mlx);
+	exit (0);
+	return (0);
+}
 int	main()
 {
 	char map[14][31] = {
@@ -198,8 +223,8 @@ int	main()
 								{'1', '0' , '0' , '0' , '0', '0' , '1' , '0' , '1' , ' ' , ' ' , '1' , '0', '0' , '0' , '0' , '0', '0' , '1' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0' , '0', '1' } ,
 								{'1', '1' , '1' , '1' , '1', '1' , '1' , '1' , '1' , ' ' , ' ' , '1' , '1', '1' , '1' , '1' , '1', '1' , '1' , '1' , '1' , '1' , '1' , '1' , '1' , '1' , '1' , '1' , '1' , '1', '1' }
 							};
+	atexit(leak);
 	t_mlx	*mlx;
-	static int f;
 	mlx = (t_mlx *)malloc(sizeof(t_mlx));
 	   mlx->map = (char**)malloc(14 * sizeof(char*));
 
@@ -211,48 +236,43 @@ int	main()
             mlx->map[i][j] = map[i][j];
         }
     }
-	
-	// mlx->map = allocate_map(map, 14, 13);
+
 	mlx->rays = (t_ray *)malloc(sizeof(t_ray) * mlx->win_w);
 	init_player(mlx);
 	mlx->win_h = 14 * TILE_SIZE;
 	mlx->win_w = 31 * TILE_SIZE;
 	mlx->mlx_init = mlx_init();
-	if (f == 0)
-	{
-		mlx->mlx_win = mlx_new_window(mlx->mlx_init, mlx->win_w, mlx->win_h, "cub3d");
-		mlx->img.img_ptr = mlx_new_image(mlx->mlx_init, mlx->win_w, mlx->win_h);
-		mlx->img.data = mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size, &mlx->img.endian);
-		init_rays_dir(mlx);
-		//N
-		mlx->text_n.img.img_ptr = mlx_xpm_file_to_image(mlx->mlx_init, "./textures/greystone.xpm", &mlx->text_n.w, &mlx->text_n.h);
-		mlx->text_n.img.data = mlx_get_data_addr(mlx->text_n.img.img_ptr, &mlx->text_n.img.bpp, &mlx->text_n.img.size, &mlx->text_n.img.endian);
-		//S
-		mlx->text_s.img.img_ptr = mlx_xpm_file_to_image(mlx->mlx_init, "./textures/eagle.xpm", &mlx->text_s.w, &mlx->text_s.h);
-		mlx->text_s.img.data = mlx_get_data_addr(mlx->text_s.img.img_ptr, &mlx->text_s.img.bpp, &mlx->text_s.img.size, &mlx->text_s.img.endian);
-		//E
-		mlx->text_e.img.img_ptr = mlx_xpm_file_to_image(mlx->mlx_init, "./textures/redbrick.xpm", &mlx->text_e.w, &mlx->text_e.h);
-		mlx->text_e.img.data = mlx_get_data_addr(mlx->text_e.img.img_ptr, &mlx->text_e.img.bpp, &mlx->text_e.img.size, &mlx->text_e.img.endian);
-		//W
-		mlx->text_w.img.img_ptr = mlx_xpm_file_to_image(mlx->mlx_init, "./textures/bluestone.xpm", &mlx->text_w.w, &mlx->text_w.h);
-		mlx->text_w.img.data = mlx_get_data_addr(mlx->text_w.img.img_ptr, &mlx->text_w.img.bpp, &mlx->text_w.img.size, &mlx->text_w.img.endian);
+	mlx->mlx_win = mlx_new_window(mlx->mlx_init, mlx->win_w, mlx->win_h, "cub3d");
+	mlx->img.img_ptr = mlx_new_image(mlx->mlx_init, mlx->win_w, mlx->win_h);
+	mlx->img.data = mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size, &mlx->img.endian);
+	init_rays_dir(mlx);
+	//N
+	mlx->text_n.img.img_ptr = mlx_xpm_file_to_image(mlx->mlx_init, "./textures/greystone.xpm", &mlx->text_n.w, &mlx->text_n.h);
+	mlx->text_n.img.data = mlx_get_data_addr(mlx->text_n.img.img_ptr, &mlx->text_n.img.bpp, &mlx->text_n.img.size, &mlx->text_n.img.endian);
+	//S
+	mlx->text_s.img.img_ptr = mlx_xpm_file_to_image(mlx->mlx_init, "./textures/eagle.xpm", &mlx->text_s.w, &mlx->text_s.h);
+	mlx->text_s.img.data = mlx_get_data_addr(mlx->text_s.img.img_ptr, &mlx->text_s.img.bpp, &mlx->text_s.img.size, &mlx->text_s.img.endian);
+	//E
+	mlx->text_e.img.img_ptr = mlx_xpm_file_to_image(mlx->mlx_init, "./textures/redbrick.xpm", &mlx->text_e.w, &mlx->text_e.h);
+	mlx->text_e.img.data = mlx_get_data_addr(mlx->text_e.img.img_ptr, &mlx->text_e.img.bpp, &mlx->text_e.img.size, &mlx->text_e.img.endian);
+	//W
+	mlx->text_w.img.img_ptr = mlx_xpm_file_to_image(mlx->mlx_init, "./textures/bluestone.xpm", &mlx->text_w.w, &mlx->text_w.h);
+	mlx->text_w.img.data = mlx_get_data_addr(mlx->text_w.img.img_ptr, &mlx->text_w.img.bpp, &mlx->text_w.img.size, &mlx->text_w.img.endian);
 		
 		//player image
-		
-		mlx->text_n_arr = (int *)malloc(sizeof(int) * mlx->text_n.w * mlx->text_n.h);
-		mlx->text_s_arr = (int *)malloc(sizeof(int) * mlx->text_s.w * mlx->text_s.h);
-		mlx->text_e_arr = (int *)malloc(sizeof(int) * mlx->text_e.w * mlx->text_e.h);
-		mlx->text_w_arr = (int *)malloc(sizeof(int) * mlx->text_w.w * mlx->text_w.h);
-		fill_text_arr(mlx, &mlx->text_n, mlx->text_n_arr);
-		fill_text_arr(mlx, &mlx->text_s, mlx->text_s_arr);
-		fill_text_arr(mlx, &mlx->text_e, mlx->text_e_arr);
-		fill_text_arr(mlx, &mlx->text_w, mlx->text_w_arr);
-		
-	}
+		// mlx->text_n_arr = (int *)malloc(sizeof(int) * mlx->text_n.w * mlx->text_n.h);
+		// mlx->text_s_arr = (int *)malloc(sizeof(int) * mlx->text_s.w * mlx->text_s.h);
+		// mlx->text_e_arr = (int *)malloc(sizeof(int) * mlx->text_e.w * mlx->text_e.h);
+		// mlx->text_w_arr = (int *)malloc(sizeof(int) * mlx->text_w.w * mlx->text_w.h);
+		// fill_text_arr(mlx, &mlx->text_n, mlx->text_n_arr);
+		// fill_text_arr(mlx, &mlx->text_s, mlx->text_s_arr);
+		// fill_text_arr(mlx, &mlx->text_e, mlx->text_e_arr);
+		// fill_text_arr(mlx, &mlx->text_w, mlx->text_w_arr);
 	
 	// mlx_hook(mlx->mlx_win, 06, 0, mouse_move, mlx);
 	mlx_hook(mlx->mlx_win, 03, 0, release, mlx);
-	mlx_hook(mlx->mlx_win, 02, 1L<<2, move_player, mlx);
+	mlx_hook(mlx->mlx_win, 17, 0, ft_exit, mlx);
+	mlx_hook(mlx->mlx_win, 02, 0, move_player, mlx);
 	mlx_loop_hook(mlx->mlx_init, render_map, mlx);
 	mlx_loop(mlx->mlx_init);
 	

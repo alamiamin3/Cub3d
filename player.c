@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 15:25:09 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/18 21:01:54 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/20 13:58:03 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ int	move_player(int key, t_mlx *mlx)
 		mlx->player.walk_direction = 1;
 	if (key == 1)
 		mlx->player.walk_direction = -1;
+	if (key == 53)
+		ft_exit(mlx);
 	return (0);
 }
 

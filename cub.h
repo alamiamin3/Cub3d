@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 09:49:16 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/19 15:03:58 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/20 13:57:48 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,5 +143,6 @@ void	get_first_intersection(t_mlx *mlx, float *xi, float *yi, int i);
 void	save_distance(t_mlx *mlx, float xi, float yi, int i);
 void	render_walls(t_mlx *mlx);
 void	draw_based_on_direction(t_mlx *mlx, int i, char dir);
+int		ft_exit(t_mlx *mlx);
 
 #endif
