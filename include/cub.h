@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 09:49:16 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/20 13:57:48 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/30 17:51:52 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,15 @@
 
 # include <math.h>
 # include <mlx.h>
+# include <stdio.h>
+# include <stdlib.h>
 # include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+# include <unistd.h>
 # define TILE_SIZE 64
-# define MAP_SCALE 0.2
+# define MAP_SCALE 0.15
 # define PI 3.141592
 # define FOV 1.02
+# include "./parsing.h"
 
 typedef struct s_ray
 {
@@ -45,11 +46,13 @@ typedef struct s_ray
 	int			hit_v;
 	int			hit_h;
 }				t_ray;
+
 typedef struct s_map
 {
 	int			map_h;
 	int			map_w;
 }				t_map;
+
 typedef struct s_img
 {
 	void		*img_ptr;
@@ -63,12 +66,11 @@ typedef struct s_player
 {
 	float		x;
 	float		y;
-	int turn_direction; // 0 (default)  1 (right) -1 (left)
-	int walk_direction; // 0 (default)  1 (up)    -1 (down)
+	int			turn_direction;
+	int			walk_direction;
 	float		rotat_angle;
-	float mov_speed; //how many pixel per frame to increase or decrease
-	float rot_speed; //how many degrees per frame to increase or decreaase
-
+	float		mov_speed;
+	float		rot_speed;
 }				t_player;
 
 typedef struct s_texture
@@ -77,8 +79,14 @@ typedef struct s_texture
 	int			h;
 	int			w;
 	int			text_offset;
-
 }				t_texture;
+
+typedef struct t_axes
+{
+	float		x1;
+	float		y1;
+	float		y2;
+}				t_axes;
 
 typedef struct s_mlx
 {
@@ -87,6 +95,7 @@ typedef struct s_mlx
 	int			win_h;
 	int			win_w;
 	char		**map;
+	char		angle;
 	t_img		img;
 	t_img		m_map;
 	t_player	player;
@@ -99,6 +108,9 @@ typedef struct s_mlx
 	int			*text_s_arr;
 	int			*text_e_arr;
 	int			*text_w_arr;
+	t_data		*data;
+	t_text		text_ure;
+	t_axes		axes;
 }				t_mlx;
 
 typedef struct s_game
@@ -106,20 +118,15 @@ typedef struct s_game
 	t_mlx		*mlx;
 	char		**map;
 	t_player	player;
-
 }				t_game;
 
 void			get_intersect_and_draw(t_mlx *mlx, int i);
 void			get_horizontal_intersect(t_mlx *mlx, int i);
 void			get_vertical_intersect(t_mlx *mlx, int i);
-void			draw_line(t_mlx *mlx, float angle, float x1, float y1);
-void			draw_ray_line(t_mlx *mlx, float x1, float y1,
-					int j);
+void			draw_ray_line(t_mlx *mlx, float x1, float y1, int j);
 void			render_projection(t_mlx *mlx);
-void			draw_project(t_mlx *mlx, float x1, float y1, float y2,
-					int color);
 void			my_mlx_pixel_put(t_mlx *mlx, int x, int y, int color);
-void			render_walls(t_mlx *mlx);
+void			render_walls(t_mlx *mlx, int i);
 void			render_ceiling(t_mlx *mlx);
 void			render_floor(t_mlx *mlx);
 void			walk_player(t_mlx *mlx);
@@ -133,16 +140,32 @@ void			draw_rays(t_mlx *mlx);
 void			cast_rays(t_mlx *mlx);
 void			define_direction(t_mlx *mlx, int i);
 void			normalize_ray_angle(t_mlx *mlx, int i, float ray_angle);
-void			draw_map_img(char **map,  t_mlx *mlx);
+void			draw_map_img(char **map, t_mlx *mlx);
 void			draw_minimap_elm(t_mlx *mlx, int elm, int i, int j);
 int				draw_player(t_mlx *mlx);
-void    		draw_pixels_line(t_mlx *mlx, float dx, float dy);
-int	is_boundries_hited(t_mlx *mlx, float x_inter, float y_inter);
-int	is_wall_hitted(t_mlx *mlx, float x_inter, float y_inter, int i);
-void	get_first_intersection(t_mlx *mlx, float *xi, float *yi, int i);
-void	save_distance(t_mlx *mlx, float xi, float yi, int i);
-void	render_walls(t_mlx *mlx);
-void	draw_based_on_direction(t_mlx *mlx, int i, char dir);
-int		ft_exit(t_mlx *mlx);
-
+void			draw_pixels_line(t_mlx *mlx, float dx, float dy);
+int				is_boundries_hited(t_mlx *mlx, float x_inter, float y_inter);
+int				is_wall_hitted(t_mlx *mlx, float x_inter, float y_inter, int i);
+void			get_first_intersection(t_mlx *mlx, float *xi, float *yi, int i);
+void			save_distance(t_mlx *mlx, float xi, float yi, int i);
+void			draw_based_on_direction(t_mlx *mlx, int i, char dir);
+int				ft_exit(t_mlx *mlx);
+int				check_(char **map);
+void			drawing(t_mlx *mlx, t_data *data);
+int				release(int key, t_mlx *mlx);
+int				render_map(t_mlx *mlx);
+int				parsing(char **argv, int reached_map, int fd, t_mlx *mlx);
+int				is_empty(t_mlx *mlx);
+void			init(t_data *data);
+void			get_player_pos(t_mlx *mlx);
+int				get_text_color(char *data, int x_off, int y_off, int s_l);
+void			draw_ceiling(t_mlx *mlx, float x1, float y1, float y2);
+void			draw_floor(t_mlx *mlx, float x1, float y1, float y2);
 #endif
+//leak problem in map not surrounded by walls
+//leak : invalid map with space
+//leak : element missing
+//leak : texture invalid
+// leak : empty file
+// leak : textures missing
+//leak : new lines after the map

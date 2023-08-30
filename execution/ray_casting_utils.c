@@ -6,11 +6,11 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 16:12:58 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/17 17:11:58 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/24 14:45:14 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub.h"
+#include "../include/cub.h"
 
 void	draw_pixels_line(t_mlx *mlx, float dx, float dy)
 {

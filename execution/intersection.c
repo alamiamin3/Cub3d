@@ -6,11 +6,11 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 19:00:25 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/19 14:23:25 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/24 14:45:14 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub.h"
+#include "../include/cub.h"
 #include <stdio.h>
 
 void	get_horizontal_steps(t_mlx *mlx, int i, float *xs, float *ys)

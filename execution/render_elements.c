@@ -6,14 +6,13 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 14:26:54 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/19 14:40:44 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/30 17:15:35 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub.h"
+#include "../include/cub.h"
 
-void	draw_project(t_mlx *mlx, float x1, float y1, float y2,
-		int color)
+void	draw_ceiling(t_mlx *mlx, float x1, float y1, float y2)
 {
 	float	step;
 	float	dy;
@@ -26,32 +25,37 @@ void	draw_project(t_mlx *mlx, float x1, float y1, float y2,
 	y_inc = dy / step;
 	while (i < (int)step)
 	{
-		my_mlx_pixel_put(mlx, x1, y1, color);
+		my_mlx_pixel_put(mlx, x1, y1, mlx->data->ceiling.color);
 		y1 += y_inc;
 		i++;
 	}
 }
 
-void	render_ceiling(t_mlx *mlx)
+void	draw_floor(t_mlx *mlx, float x1, float y1, float y2)
 {
-	int	i;
+	float	step;
+	float	dy;
+	float	y_inc;
+	int		i;
 
 	i = 0;
-	while (i < mlx->win_w)
+	dy = y2 - y1;
+	step = fabs(dy);
+	y_inc = dy / step;
+	while (i < (int)step)
 	{
-		draw_project(mlx, i, 0, mlx->rays[i].top_wall, 0x73BEFF);
+		my_mlx_pixel_put(mlx, x1, y1, mlx->data->floor.color);
+		y1 += y_inc;
 		i++;
 	}
 }
 
-void	render_floor(t_mlx *mlx)
+int	get_text_color(char *data, int x_off, int y_off, int s_l)
 {
-	int	i;
+	char	*dst;
+	int		color;
 
-	i = 0;
-	while (i < mlx->win_w)
-	{
-		draw_project(mlx, i, mlx->rays[i].bot_wall, mlx->win_h, 0x5B595B);
-		i++;
-	}
+	dst = data + (y_off * s_l + x_off * 4);
+	color = *(unsigned int *)dst;
+	return (color);
 }

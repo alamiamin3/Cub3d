@@ -6,11 +6,11 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 19:22:10 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/19 14:22:37 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/24 14:45:14 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub.h"
+#include "../include/cub.h"
 
 int	is_boundries_hited(t_mlx *mlx, float x_inter, float y_inter)
 {

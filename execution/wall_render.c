@@ -6,11 +6,11 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 22:10:27 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/20 12:23:21 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/30 17:05:43 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub.h"
+#include "../include/cub.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -21,7 +21,6 @@ void	draw_west_text(t_mlx *mlx, int wall_top, int wall_bot, int i)
 	int	step;
 	int	y;
 	int	dis_from_top;
-	char *dst;
 
 	y = wall_top;
 	step = abs(wall_bot - wall_top);
@@ -30,10 +29,8 @@ void	draw_west_text(t_mlx *mlx, int wall_top, int wall_bot, int i)
 		dis_from_top = y + (mlx->rays[i].wall_height / 2) - (mlx->win_h / 2);
 		y_off = dis_from_top * ((float)mlx->text_w.h
 				/ mlx->rays[i].wall_height);
-		dst = mlx->text_w.img.data + (y_off * mlx->text_w.img.size + mlx->text_w.text_offset * 4);
-		color = *(unsigned int *)dst;
-		// color = mlx->text_w_arr[y_off * mlx->text_w.w
-		// 	+ mlx->text_w.text_offset];
+		color = get_text_color(mlx->text_w.img.data, mlx->text_w.text_offset,
+				y_off, mlx->text_w.img.size);
 		my_mlx_pixel_put(mlx, i, wall_top, color);
 		wall_top += 1;
 		y++;
@@ -43,12 +40,11 @@ void	draw_west_text(t_mlx *mlx, int wall_top, int wall_bot, int i)
 
 void	draw_east_text(t_mlx *mlx, int wall_top, int wall_bot, int i)
 {
-	int	y_off;
-	int	color;
-	int	step;
-	int	y;
-	int	dis_from_top;
-	char *dst;
+	int		y_off;
+	int		color;
+	int		step;
+	int		y;
+	int		dis_from_top;
 
 	y = wall_top;
 	step = abs(wall_bot - wall_top);
@@ -57,10 +53,8 @@ void	draw_east_text(t_mlx *mlx, int wall_top, int wall_bot, int i)
 		dis_from_top = y + (mlx->rays[i].wall_height / 2) - (mlx->win_h / 2);
 		y_off = dis_from_top * ((float)mlx->text_e.h
 				/ mlx->rays[i].wall_height);
-		dst = mlx->text_e.img.data + (y_off * mlx->text_e.img.size + mlx->text_e.text_offset * 4);
-		color = *(unsigned int *)dst;
-		// color = mlx->text_e_arr[y_off * mlx->text_e.w
-		// 	+ mlx->text_e.text_offset];
+		color = get_text_color(mlx->text_e.img.data, mlx->text_e.text_offset,
+				y_off, mlx->text_e.img.size);
 		my_mlx_pixel_put(mlx, i, wall_top, color);
 		wall_top += 1;
 		y++;
@@ -70,12 +64,11 @@ void	draw_east_text(t_mlx *mlx, int wall_top, int wall_bot, int i)
 
 void	draw_north_text(t_mlx *mlx, int wall_top, int wall_bot, int i)
 {
-	int	y_off;
-	int	color;
-	int	step;
-	int	y;
-	int	dis_from_top;
-	char *dst;
+	int		y_off;
+	int		color;
+	int		step;
+	int		y;
+	int		dis_from_top;
 
 	y = wall_top;
 	step = abs(wall_bot - wall_top);
@@ -84,10 +77,8 @@ void	draw_north_text(t_mlx *mlx, int wall_top, int wall_bot, int i)
 		dis_from_top = y + (mlx->rays[i].wall_height / 2) - (mlx->win_h / 2);
 		y_off = dis_from_top * ((float)mlx->text_n.h
 				/ mlx->rays[i].wall_height);
-		dst = mlx->text_n.img.data + (y_off * mlx->text_n.img.size + mlx->text_n.text_offset * 4);
-		color = *(unsigned int *)dst;
-		// color = mlx->text_n_arr[y_off * mlx->text_n.w
-		// 	+ mlx->text_n.text_offset];
+		color = get_text_color(mlx->text_n.img.data, mlx->text_n.text_offset,
+				y_off, mlx->text_n.img.size);
 		my_mlx_pixel_put(mlx, i, wall_top, color);
 		wall_top += 1;
 		y++;
@@ -97,12 +88,11 @@ void	draw_north_text(t_mlx *mlx, int wall_top, int wall_bot, int i)
 
 void	draw_south_text(t_mlx *mlx, int wall_top, int wall_bot, int i)
 {
-	int	y_off;
-	int	color;
-	int	step;
-	int	y;
-	int	dis_from_top;
-	char	*dst;
+	int		y_off;
+	int		color;
+	int		step;
+	int		y;
+	int		dis_from_top;
 
 	y = wall_top;
 	step = abs(wall_bot - wall_top);
@@ -111,10 +101,8 @@ void	draw_south_text(t_mlx *mlx, int wall_top, int wall_bot, int i)
 		dis_from_top = y + (mlx->rays[i].wall_height / 2) - (mlx->win_h / 2);
 		y_off = dis_from_top * ((float)mlx->text_s.h
 				/ mlx->rays[i].wall_height);
-		dst = mlx->text_s.img.data + (y_off * mlx->text_s.img.size + mlx->text_s.text_offset * 4);
-		color = *(unsigned int *)dst;
-		// color = mlx->text_s_arr[y_off * mlx->text_s.w
-		// 	+ mlx->text_s.text_offset];
+		color = get_text_color(mlx->text_s.img.data, mlx->text_s.text_offset,
+				y_off, mlx->text_s.img.size);
 		my_mlx_pixel_put(mlx, i, wall_top, color);
 		wall_top += 1;
 		y++;

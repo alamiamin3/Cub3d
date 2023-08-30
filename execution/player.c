@@ -3,46 +3,53 @@
 /*                                                        :::      ::::::::   */
 /*   player.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 15:25:09 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/20 13:58:03 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/30 12:37:14 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub.h"
+#include "../include/cub.h"
 
-void	get_player_pos(t_mlx *mlx)
+int	get_rotation(char angle)
 {
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < 14)
-	{
-		j = 0;
-		while (j < 31)
-		{
-			if (mlx->map[i][j] == 'N')
-			{
-				mlx->player.x = j * TILE_SIZE + TILE_SIZE / 2;
-				mlx->player.y = i * TILE_SIZE + TILE_SIZE / 2;
-				return ;
-			}
-			j++;
-		}
-		i++;
-	}
+	if (angle == 'N')
+		return (-90);
+	else if (angle == 'S')
+		return (90);
+	else if (angle == 'E')
+		return (0);
+	return (180);
 }
 
 void	init_player(t_mlx *mlx)
 {
+	int	i;
+	int	j;
+
+	i = -1;
+	while (mlx->data->map_represent[++i])
+	{
+		j = -1;
+		while (mlx->data->map_represent[i][++j] != '\0')
+		{
+			if (mlx->data->map_represent[i][j] == 'N' \
+			|| mlx->data->map_represent[i][j] == 'S' \
+			|| mlx->data->map_represent[i][j] == 'E' \
+			|| mlx->data->map_represent[i][j] == 'W')
+			{
+				mlx->angle = mlx->data->map_represent[i][j];
+				break ;
+			}
+		}
+	}
 	get_player_pos(mlx);
 	mlx->player.turn_direction = 0;
 	mlx->player.walk_direction = 0;
-	mlx->player.rotat_angle = 90 * (PI / 180);
+	mlx->player.rotat_angle = get_rotation(mlx->angle) * (PI / 180);
 	mlx->player.rot_speed = 0.015;
-	mlx->player.mov_speed = 5.5;
+	mlx->player.mov_speed = 4.5;
 }
 
 int	move_player(int key, t_mlx *mlx)

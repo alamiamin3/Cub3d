@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   render_mini_map.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 15:47:08 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/17 16:10:50 by aalami           ###   ########.fr       */
+/*   Updated: 2023/08/30 12:50:56 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub.h"
+#include "../include/cub.h"
 
 void	draw_minimap_elm(t_mlx *mlx, int elm, int i, int j)
 {
@@ -42,15 +42,17 @@ void	draw_map_img(char **map, t_mlx *mlx)
 
 	i = 0;
 	j = 0;
-	while (i < 14)
+	while (i < mlx->win_h / TILE_SIZE)
 	{
 		j = 0;
-		while (j < 31)
+		while (j < mlx->win_w / TILE_SIZE)
 		{
 			y = 0;
 			if (map[i][j] == '1')
 				draw_minimap_elm(mlx, 1, i, j);
-			else if (map[i][j] == '0' || map[i][j] == 'N')
+			else if (map[i][j] == '0' \
+			|| map[i][j] == 'N' || map[i][j] == 'S' \
+			|| map[i][j] == 'E' || map[i][j] == 'W')
 				draw_minimap_elm(mlx, 0, i, j);
 			j++;
 		}
