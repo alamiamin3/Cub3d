@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 14:39:08 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/30 17:57:41 by aalami           ###   ########.fr       */
+/*   Updated: 2023/09/05 12:29:42 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ void	init(t_data *data)
 	data->floor.b = NULL;
 	data->floor.r = NULL;
 	data->floor.g = NULL;
+	data->map_represent = NULL;
 }
 
-void	fill_text_arr(t_mlx *mlx, t_texture *text, int *text_arr)
+void	fill_text_arr(t_texture *text, int *text_arr)
 {
 	char	*dst;
-	int		color;
 	int		i;
 	int		x;
 	int		y;
@@ -71,37 +71,41 @@ int	ft_exit(t_mlx *mlx)
 {
 	free(mlx->rays);
 	free_map(mlx);
+	free_data(mlx->data);
 	mlx_destroy_window(mlx->mlx_init, mlx->mlx_win);
 	free(mlx);
 	exit (0);
 	return (0);
 }
-void leak()
+void	a()
 {
 	system("leaks cub3d");
 }
 int	main(int argc, char **argv)
 {
 	t_data	*data;
-	t_mlx	*mlx;
 	int		fd;
 	int		reached_map;
-// atexit(leak);
-	if (argc != 2)
+atexit(a);
+	if (argc != 2 || !check_cub(argv[1]))
 		return (printf("Usage: ./program_name file_name\n"));
-	mlx = (t_mlx *)malloc(sizeof(t_mlx));
-	if (!mlx)
-		return (printf("Malloc error\n"));
-	mlx->mlx_init = mlx_init();
 	reached_map = 0;
 	fd = open(argv[1], O_RDWR, 0777);
 	if (fd == -1)
 		return (printf("Error opening file\n"));
 	data = malloc(sizeof(t_data));
+	if (!data)
+	{
+		perror("");
+		return (1);
+	}
 	init(data); 
-	mlx->data = data;
-	if (!data || parsing(argv, reached_map, fd, mlx))
-		return (printf("Error parsing\n"));
-	drawing(mlx, data);
+	if (parsing(argv, reached_map, fd, data))
+	{
+		printf("error parsing\n");
+		exit (1);
+	}
+	data->init = mlx_init();
+	drawing(data);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 11:48:08 by adardour          #+#    #+#             */
-/*   Updated: 2023/08/24 13:57:29 by aalami           ###   ########.fr       */
+/*   Updated: 2023/09/01 18:03:54 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	check_spaces(char *line)
 	int	i;
 
 	i = 0;
-	while (i < ft_strlen(line) - 1)
+	while ((size_t)i < ft_strlen(line) - 1)
 	{
 		if (line[i] != ' ')
 			return (1);
@@ -71,7 +71,6 @@ char	*remove_spaces(char *line)
 
 void	fill_map(char *first_line, t_data *data, int count)
 {
-	char	*removes;
 	int		fd;
 	char	*line;
 	int		i;

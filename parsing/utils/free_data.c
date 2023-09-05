@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   free_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 17:35:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/08/24 13:40:39 by aalami           ###   ########.fr       */
+/*   Updated: 2023/09/01 14:32:36 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/parsing.h"
+#include "../../include/cub.h"
 
 void	free_data(t_data *data)
 {

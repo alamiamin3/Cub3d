@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 14:43:23 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/30 17:13:04 by aalami           ###   ########.fr       */
+/*   Updated: 2023/09/05 17:58:25 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	render_projection(t_mlx *mlx)
 
 	i = 0;
 	proj_dis = (mlx->win_w / 2) / (tan(FOV / 2));
+	
 	while (i < mlx->win_w)
 	{
 		correct_dis = cos(mlx->player.rotat_angle - mlx->rays[i].ray_angle)

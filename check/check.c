@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 11:48:46 by adardour          #+#    #+#             */
-/*   Updated: 2023/08/29 20:23:54 by adardour         ###   ########.fr       */
+/*   Updated: 2023/09/05 15:18:33 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,57 +53,38 @@ int	check_car(char *r, char *g, char *b)
 	return (check_);
 }
 
+void	check_walk(t_mlx *mlx, int *pos_x, int *pos_y)
+{
+	if (mlx->player.walk_ud == 1 || mlx->player.walk_ud == -1)
+	{
+		*pos_x = (mlx->player.x + ((cos(mlx->player.rotat_angle) \
+		* (mlx->player.mov_speed * 5)) \
+		* mlx->player.walk_ud)) / TILE_SIZE;
+		*pos_y = (mlx->player.y + ((sin(mlx->player.rotat_angle) \
+		* (mlx->player.mov_speed * 5)) \
+		* mlx->player.walk_ud)) / TILE_SIZE;
+	}
+	else
+	{
+		*pos_x = (mlx->player.x + ((cos(mlx->player.rotat_angle - 1.57) \
+		* (mlx->player.mov_speed * 5)) \
+		* mlx->player.walk_rl)) / TILE_SIZE;
+		*pos_y = (mlx->player.y + ((sin(mlx->player.rotat_angle - 1.57) \
+		* (mlx->player.mov_speed * 5)) \
+		* mlx->player.walk_rl)) / TILE_SIZE;
+	}
+}
+
 int	check_wall(t_mlx *mlx)
 {
 	int		pos_x;
 	int		pos_y;
 
-	if (mlx->player.walk_direction != 0)
+	if (mlx->player.walk_ud != 0 || mlx->player.walk_rl != 0)
 	{
-		pos_x = (mlx->player.x + ((cos(mlx->player.rotat_angle) \
-		* (mlx->player.mov_speed * 5)) \
-		* mlx->player.walk_direction)) / TILE_SIZE;
-		pos_y = (mlx->player.y + ((sin(mlx->player.rotat_angle) \
-		* (mlx->player.mov_speed * 5)) \
-		* mlx->player.walk_direction)) / TILE_SIZE;
+		check_walk(mlx, &pos_x, &pos_y);
 		if (mlx->map[pos_y][pos_x] == '1')
 			return (0);
 	}
 	return (1);
-}
-
-int	check_path(char *path, t_mlx *mlx)
-{
-	int		w;
-	int		h;
-	void	*img;
-
-	img = mlx_xpm_file_to_image(mlx->mlx_init, path, &w, &h);
-	if (!img)
-		return (0);
-	return (1);
-}
-
-int	is_empty(t_mlx *mlx)
-{
-	char	*path;
-	int		i;
-
-	i = -1;
-	while (++i < 4)
-	{
-		if (i == 0)
-			path = mlx->data->texture.ea;
-		else if (i == 1)
-			path = mlx->data->texture.so;
-		else if (i == 2)
-			path = mlx->data->texture.no;
-		else if (i == 3)
-			path = mlx->data->texture.we;
-		if (!check_path(path, mlx))
-			return (free(path), 1);
-		else
-			free(path);
-	}
-	return (0);
 }

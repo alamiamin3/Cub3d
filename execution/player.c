@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 15:25:09 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/30 12:37:14 by adardour         ###   ########.fr       */
+/*   Updated: 2023/09/05 15:33:07 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,28 +25,10 @@ int	get_rotation(char angle)
 
 void	init_player(t_mlx *mlx)
 {
-	int	i;
-	int	j;
-
-	i = -1;
-	while (mlx->data->map_represent[++i])
-	{
-		j = -1;
-		while (mlx->data->map_represent[i][++j] != '\0')
-		{
-			if (mlx->data->map_represent[i][j] == 'N' \
-			|| mlx->data->map_represent[i][j] == 'S' \
-			|| mlx->data->map_represent[i][j] == 'E' \
-			|| mlx->data->map_represent[i][j] == 'W')
-			{
-				mlx->angle = mlx->data->map_represent[i][j];
-				break ;
-			}
-		}
-	}
 	get_player_pos(mlx);
 	mlx->player.turn_direction = 0;
-	mlx->player.walk_direction = 0;
+	mlx->player.walk_ud = 0;
+	mlx->player.walk_rl = 0;
 	mlx->player.rotat_angle = get_rotation(mlx->angle) * (PI / 180);
 	mlx->player.rot_speed = 0.015;
 	mlx->player.mov_speed = 4.5;
@@ -54,15 +36,19 @@ void	init_player(t_mlx *mlx)
 
 int	move_player(int key, t_mlx *mlx)
 {
-	if (key == 123)
+	if (key == ARR_LEFT)
 		mlx->player.turn_direction = -1;
-	if (key == 124)
+	if (key == ARR_RIGHT)
 		mlx->player.turn_direction = 1;
-	if (key == 13)
-		mlx->player.walk_direction = 1;
-	if (key == 1)
-		mlx->player.walk_direction = -1;
-	if (key == 53)
+	if (key == KEY_UP)
+		mlx->player.walk_ud = 1;
+	if (key == KEY_DOWN)
+		mlx->player.walk_ud = -1;
+	if (key == KEY_RIGHT)
+		mlx->player.walk_rl = -1;
+	if (key == KEY_LEFT)
+		mlx->player.walk_rl = 1;
+	if (key == KEY_EXIT)
 		ft_exit(mlx);
 	return (0);
 }
@@ -80,8 +66,18 @@ int	rotate_player(t_mlx *mlx)
 
 void	walk_player(t_mlx *mlx)
 {
-	mlx->player.x += cos(mlx->player.rotat_angle) * mlx->player.mov_speed
-		* mlx->player.walk_direction;
-	mlx->player.y += sin(mlx->player.rotat_angle) * mlx->player.mov_speed
-		* mlx->player.walk_direction;
+	if (mlx->player.walk_ud == 1 || mlx->player.walk_ud == -1)
+	{
+		mlx->player.x += cos(mlx->player.rotat_angle) * mlx->player.mov_speed
+			* mlx->player.walk_ud;
+		mlx->player.y += sin(mlx->player.rotat_angle) * mlx->player.mov_speed
+			* mlx->player.walk_ud;
+	}
+	else if (mlx->player.walk_rl == 1 || mlx->player.walk_rl == -1)
+	{
+		mlx->player.x += cos(mlx->player.rotat_angle - 1.57) * \
+			mlx->player.mov_speed * mlx->player.walk_rl;
+		mlx->player.y += sin(mlx->player.rotat_angle - 1.57) * \
+			mlx->player.mov_speed * mlx->player.walk_rl;
+	}
 }

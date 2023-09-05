@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wall_render.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 22:10:27 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/30 17:05:43 by aalami           ###   ########.fr       */
+/*   Updated: 2023/09/01 18:00:38 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,25 +114,25 @@ void	draw_based_on_direction(t_mlx *mlx, int i, char dir)
 {
 	if (dir == 'n')
 	{
-		mlx->text_n.text_offset = (int)fmod(mlx->rays[i].hit_x, TILE_SIZE);
+		mlx->text_n.text_offset = (int)fmod(mlx->rays[i].hit_x, mlx->text_n.w);
 		draw_north_text(mlx, (int)mlx->rays[i].top_wall,
 			(int)mlx->rays[i].bot_wall, i);
 	}
 	else if (dir == 's')
 	{
-		mlx->text_s.text_offset = (int)fmod(mlx->rays[i].hit_x, TILE_SIZE);
+		mlx->text_s.text_offset = (int)fmod(mlx->rays[i].hit_x, mlx->text_s.w);
 		draw_south_text(mlx, (int)mlx->rays[i].top_wall,
 			(int)mlx->rays[i].bot_wall, i);
 	}
 	else if (dir == 'e')
 	{
-		mlx->text_e.text_offset = (int)fmod(mlx->rays[i].hit_y, TILE_SIZE);
+		mlx->text_e.text_offset = (int)fmod(mlx->rays[i].hit_y, mlx->text_e.h);
 		draw_east_text(mlx, (int)mlx->rays[i].top_wall,
 			(int)mlx->rays[i].bot_wall, i);
 	}
 	else
 	{
-		mlx->text_w.text_offset = (int)fmod(mlx->rays[i].hit_y, TILE_SIZE);
+		mlx->text_w.text_offset = (int)fmod(mlx->rays[i].hit_y, mlx->text_w.h);
 		draw_west_text(mlx, (int)mlx->rays[i].top_wall,
 			(int)mlx->rays[i].bot_wall, i);
 	}

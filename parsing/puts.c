@@ -6,11 +6,12 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 16:48:05 by adardour          #+#    #+#             */
-/*   Updated: 2023/08/29 20:10:43 by adardour         ###   ########.fr       */
+/*   Updated: 2023/09/01 16:50:55 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/parsing.h"
+#include "../include/cub.h"
 
 void	put_things(t_data *data, char	**spliting, int flags)
 {
@@ -60,63 +61,54 @@ int	check_identifier(char *line)
 	return (1);
 }
 
-void	put_rgb(t_data *data, char *line, char identifier)
+int	count_color(char *line)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (line[i])
+	{
+		if (line[i] == ',')
+			count++;
+		i++;
+	}
+	if (count > 2)
+		return (0);
+	return (1);
+}
+
+int	put_rgb(t_data *data, char *line, char identifier)
 {
 	char	**spliting;
 	char	**dd;
 
+	if (!count_color(line))
+		return (0);
 	spliting = ft_split(line, ',');
-	if (identifier == 'F')
+	if (identifier == 'F' && spliting[0][0] == 'F')
 	{
-		if (spliting[0][0] == 'F')
-		{
-			dd = ft_split(spliting[0], ' ');
-			data->floor.r = ft_strdup(dd[1]);
-			free_things(dd);
-		}
+		dd = ft_split(spliting[0], ' ');
+		data->floor.r = ft_strdup(dd[1]);
+		free_things(dd);
 		put_things(data, spliting, 0);
 	}
-	else if (identifier == 'C')
+	else if (identifier == 'C' && spliting[0][0] == 'C')
 	{
-		if (spliting[0][0] == 'C')
-		{
-			dd = ft_split(spliting[0], ' ');
-			data->ceiling.r = ft_strdup(dd[1]);
-			free_things(dd);
-		}
+		dd = ft_split(spliting[0], ' ');
+		data->ceiling.r = ft_strdup(dd[1]);
+		free_things(dd);
 		put_things(data, spliting, 1);
 	}
 	free_things(spliting);
-}
-
-void	put(char *line, t_data *data, char i)
-{
-	char	**spliting;
-
-	spliting = ft_split(line, ' ');
-	if (i == 'N')
-		data->texture.no = ft_substr(spliting[1], 0, \
-		ft_strlen(spliting[1]) - 1);
-	if (i == 'S')
-		data->texture.so = ft_substr(spliting[1], 0, \
-		ft_strlen(spliting[1]) - 1);
-	if (i == 'W')
-		data->texture.we = ft_substr(spliting[1], 0, \
-		ft_strlen(spliting[1]) - 1);
-	if (i == 'E')
-		data->texture.ea = ft_substr(spliting[1], 0, \
-		ft_strlen(spliting[1]) - 1);
-	if (i == 'F')
-		put_rgb(data, line, 'F');
-	if (i == 'C')
-		put_rgb(data, line, 'C');
-	free_things(spliting);
+	return (1);
 }
 
 int	put_data(t_data *data, int fd, int *reached_map)
 {
-	int		flags;
-	char	*line;
+	int			flags;
+	char		*line;
 
 	flags = 1;
 	line = get_next_line(fd);
@@ -124,11 +116,12 @@ int	put_data(t_data *data, int fd, int *reached_map)
 	{
 		if (!check_identifier(line))
 			return (free(line), 0);
-		if (line[0] == 'N' || line[0] == 'S' \
+		else if (line[0] == 'N' || line[0] == 'S' \
 		|| line[0] == 'W' || line[0] == 'E' \
 		|| line[0] == 'F' || line[0] == 'C')
 		{
-			put(line, data, line[0]);
+			if (put(line, data, line[0]) == 0)
+				return (free(line), 0);
 			(*reached_map)++;
 		}
 		else

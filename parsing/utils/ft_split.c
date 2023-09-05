@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 14:03:03 by adardour          #+#    #+#             */
-/*   Updated: 2023/08/24 13:40:39 by aalami           ###   ########.fr       */
+/*   Updated: 2023/09/01 18:18:42 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 char	**allocate(char **spliting, int count)
 {
+	spliting = NULL;
 	spliting = malloc((sizeof(char *) * count) + 1);
 	if (!spliting)
 		exit(1);
@@ -53,29 +54,27 @@ int	get_count(char *line, int del)
 
 char	**ft_split(char *line, int del)
 {
-	char	**spliting;
-	int		i;
-	int		j;
-	int		count;
+	t_help	help;
 
-	count = get_count(line, del);
-	spliting = allocate(spliting, count);
-	i = -1;
-	while (++i < count)
+	help.count = get_count(line, del);
+	help.spliting = allocate(help.spliting, help.count);
+	help.i = -1;
+	while (++help.i < help.count)
 	{
 		while (*line != '\0' && *line == del)
 			line++;
 		if (*line != '\0' && *line != del)
 		{
-			j = 0;
-			spliting[i] = malloc((sizeof(char) * get_length(line, del)) + 1);
+			help.j = 0;
+			help.spliting[help.i] = malloc((sizeof(char) * \
+			get_length(line, del)) + 1);
 			while (*line != '\0' && *line != del)
-				spliting[i][j++] = *line++;
-			spliting[i][j] = '\0';
+				help.spliting[help.i][help.j++] = *line++;
+			help.spliting[help.i][help.j] = '\0';
 			while (*line != '\0' && *line == del)
 				line++;
 		}
 	}
-	spliting[i] = NULL;
-	return (spliting);
+	help.spliting[help.i] = NULL;
+	return (help.spliting);
 }

@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 20:30:46 by adardour          #+#    #+#             */
-/*   Updated: 2023/08/30 12:37:49 by adardour         ###   ########.fr       */
+/*   Updated: 2023/09/01 16:21:01 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,24 @@ int	check_range(t_ceiling ceiling, t_floor floor)
 	return (1);
 }
 
-void	colors(t_data *data)
+int	colors(t_data *data)
 {
+	if (!ft_strcmp(data->ceiling.r, "\n") \
+	|| !ft_strcmp(data->ceiling.g, "\n") \
+	|| !ft_strcmp(data->ceiling.b, "\n") \
+	||!ft_strcmp(data->floor.r, "\n") \
+	|| !ft_strcmp(data->floor.g, "\n") \
+	|| !ft_strcmp(data->floor.b, "\n"))
+		return (0);
 	if (!check_range(data->ceiling, data->floor))
 	{
 		printf("Range of RGB must be (0-255)");
-		exit(1);
+		return (0);
 	}
 	data->ceiling.color = get_color(data->ceiling.r, \
 	data->ceiling.g, data->ceiling.b);
 	data->floor.color = get_color(data->floor.r, data->floor.g, data->floor.b);
+	return (1);
 }
 
 int	check_rgbs(t_ceiling ceiling, t_floor floor)

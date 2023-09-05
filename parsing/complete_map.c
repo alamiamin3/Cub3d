@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 14:43:21 by adardour          #+#    #+#             */
-/*   Updated: 2023/08/29 12:27:50 by adardour         ###   ########.fr       */
+/*   Updated: 2023/09/01 18:05:10 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int	get_longest_length(char **represent_map)
 		length -= 1;
 	while (represent_map[index])
 	{
-		if (ft_strlen(represent_map[index]) > length)
+		if (ft_strlen(represent_map[index]) > (size_t)length)
 		{
 			length = ft_strlen(represent_map[index]);
 			if (check_line(represent_map[index]))

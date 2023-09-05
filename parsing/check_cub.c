@@ -1,38 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fill.c                                             :+:      :+:    :+:   */
+/*   check_cub.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/13 21:51:47 by adardour          #+#    #+#             */
-/*   Updated: 2023/08/31 12:08:38 by adardour         ###   ########.fr       */
+/*   Created: 2023/09/01 18:35:58 by adardour          #+#    #+#             */
+/*   Updated: 2023/09/01 18:38:23 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../include/cub.h"
 #include "../include/parsing.h"
 
-int	fill(int fd, t_data *data, int count, char *start_map)
+int	check_cub(char *path)
 {
-	char	*line;
-	int		i;
+	char	*extension;
 
-	data->map_represent[0] = ft_strdup(start_map);
-	i = 1;
-	while (i < count)
+	extension = ft_strrchr(path, '.') + 1;
+	if (ft_strcmp(extension, "cub"))
 	{
-		line = get_next_line(fd);
-		data->map_represent[i] = ft_strdup(line);
-		free(line);
-		i++;
+		printf("the extension must be .cub");
+		exit(1);
 	}
-	if (ft_strchr(data->map_represent[count - 1], '\n'))
-	{
-		printf("error encountered\n");
-		close(fd);
-		return (0);
-	}
-	close(fd);
-	data->map_represent[i] = NULL;
 	return (1);
 }

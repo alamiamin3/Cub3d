@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 09:49:16 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/30 17:51:52 by aalami           ###   ########.fr       */
+/*   Updated: 2023/09/05 18:26:31 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,13 @@
 # define MAP_SCALE 0.15
 # define PI 3.141592
 # define FOV 1.02
+# define ARR_LEFT 123
+# define ARR_RIGHT 124
+# define KEY_UP 13
+# define KEY_DOWN 1
+# define KEY_RIGHT 2
+# define KEY_LEFT 0
+# define KEY_EXIT 53
 # include "./parsing.h"
 
 typedef struct s_ray
@@ -67,7 +74,8 @@ typedef struct s_player
 	float		x;
 	float		y;
 	int			turn_direction;
-	int			walk_direction;
+	int			walk_ud;
+	int			walk_rl;
 	float		rotat_angle;
 	float		mov_speed;
 	float		rot_speed;
@@ -113,13 +121,6 @@ typedef struct s_mlx
 	t_axes		axes;
 }				t_mlx;
 
-typedef struct s_game
-{
-	t_mlx		*mlx;
-	char		**map;
-	t_player	player;
-}				t_game;
-
 void			get_intersect_and_draw(t_mlx *mlx, int i);
 void			get_horizontal_intersect(t_mlx *mlx, int i);
 void			get_vertical_intersect(t_mlx *mlx, int i);
@@ -151,21 +152,16 @@ void			save_distance(t_mlx *mlx, float xi, float yi, int i);
 void			draw_based_on_direction(t_mlx *mlx, int i, char dir);
 int				ft_exit(t_mlx *mlx);
 int				check_(char **map);
-void			drawing(t_mlx *mlx, t_data *data);
+void			drawing(t_data *data);
 int				release(int key, t_mlx *mlx);
 int				render_map(t_mlx *mlx);
-int				parsing(char **argv, int reached_map, int fd, t_mlx *mlx);
-int				is_empty(t_mlx *mlx);
+int				parsing(char **argv, int reached_map, int fd, t_data *data);
 void			init(t_data *data);
 void			get_player_pos(t_mlx *mlx);
 int				get_text_color(char *data, int x_off, int y_off, int s_l);
 void			draw_ceiling(t_mlx *mlx, float x1, float y1, float y2);
 void			draw_floor(t_mlx *mlx, float x1, float y1, float y2);
+void			free_data(t_data *data);
+void			handle_textures(t_mlx *mlx);
+
 #endif
-//leak problem in map not surrounded by walls
-//leak : invalid map with space
-//leak : element missing
-//leak : texture invalid
-// leak : empty file
-// leak : textures missing
-//leak : new lines after the map

@@ -6,38 +6,20 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 11:42:05 by adardour          #+#    #+#             */
-/*   Updated: 2023/08/30 17:15:57 by aalami           ###   ########.fr       */
+/*   Updated: 2023/09/05 20:42:42 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./include/cub.h"
 #include "./include/parsing.h"
 
-void	handle_textures(t_mlx *mlx)
-{
-	mlx->text_n.img.img_ptr = mlx_xpm_file_to_image(mlx->mlx_init, \
-	"./textures/11.xpm", &mlx->text_n.w, &mlx->text_n.h);
-	mlx->text_n.img.data = mlx_get_data_addr(mlx->text_n.img.img_ptr, \
-	&mlx->text_n.img.bpp, &mlx->text_n.img.size, &mlx->text_n.img.endian);
-	mlx->text_s.img.img_ptr = mlx_xpm_file_to_image(mlx->mlx_init, \
-	"./textures/11.xpm", &mlx->text_s.w, &mlx->text_s.h);
-	mlx->text_s.img.data = mlx_get_data_addr(mlx->text_s.img.img_ptr, \
-	&mlx->text_s.img.bpp, &mlx->text_s.img.size, &mlx->text_s.img.endian);
-	mlx->text_e.img.img_ptr = mlx_xpm_file_to_image(mlx->mlx_init, \
-	"./textures/11.xpm", &mlx->text_e.w, &mlx->text_e.h);
-	mlx->text_e.img.data = mlx_get_data_addr(mlx->text_e.img.img_ptr, \
-	&mlx->text_e.img.bpp, &mlx->text_e.img.size, &mlx->text_e.img.endian);
-	mlx->text_w.img.img_ptr = mlx_xpm_file_to_image(mlx->mlx_init, \
-	"./textures/11.xpm", &mlx->text_w.w, &mlx->text_w.h);
-	mlx->text_w.img.data = mlx_get_data_addr(mlx->text_w.img.img_ptr, \
-	&mlx->text_w.img.bpp, &mlx->text_w.img.size, &mlx->text_w.img.endian);
-}
-
 int	release(int key, t_mlx *mlx)
 {
-	if (key == 13 || key == 1)
-		mlx->player.walk_direction = 0;
-	if (key == 123 || key == 124)
+	if (key == KEY_UP || key == KEY_DOWN)
+		mlx->player.walk_ud = 0;
+	if (key == KEY_RIGHT || key == KEY_LEFT)
+		mlx->player.walk_rl = 0;
+	if (key == ARR_LEFT || key == ARR_RIGHT)
 		mlx->player.turn_direction = 0;
 	return (0);
 }
@@ -56,7 +38,7 @@ int	render_map(t_mlx *mlx)
 	{
 		if (mlx->player.turn_direction != 0)
 			rotate_player(mlx);
-		if (mlx->player.walk_direction != 0)
+		if (mlx->player.walk_ud != 0 || mlx->player.walk_rl != 0)
 			walk_player(mlx);
 	}
 	cast_rays(mlx);
@@ -69,13 +51,20 @@ int	render_map(t_mlx *mlx)
 	return (0);
 }
 
-void	drawing(t_mlx *mlx, t_data *data)
+void	drawing(t_data *data)
 {
+	t_mlx	*mlx;
+
+	mlx = malloc(sizeof(t_mlx));
+	if (!mlx)
+		return (perror(""), exit(1));
 	mlx->data = data;
+	mlx->mlx_init = data->init;
 	mlx->map = data->map_represent;
 	init_player(mlx);
-	mlx->win_h = get_rows(data->map_represent) * TILE_SIZE;
-	mlx->win_w = get_columns(data->map_represent) * TILE_SIZE;
+	mlx->win_h = 830;
+	mlx->win_w = 1850;
+	printf("%d %d\n", mlx->win_h, mlx->win_w);
 	mlx->rays = (t_ray *)malloc(sizeof(t_ray) * mlx->win_w);
 	mlx->mlx_win = mlx_new_window(mlx->mlx_init, \
 	mlx->win_w, mlx->win_h, "cub3d");

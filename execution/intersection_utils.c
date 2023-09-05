@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 19:22:10 by aalami            #+#    #+#             */
-/*   Updated: 2023/08/24 14:45:14 by aalami           ###   ########.fr       */
+/*   Updated: 2023/09/05 18:10:56 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,14 @@
 
 int	is_boundries_hited(t_mlx *mlx, float x_inter, float y_inter)
 {
-	if ((int)y_inter / TILE_SIZE < 0 || (int)y_inter / TILE_SIZE >= mlx->win_h
-		/ TILE_SIZE)
+	int	height;
+	int	width;
+
+	height = get_rows(mlx->map);
+	width = get_columns(mlx->map);
+	if ((int)y_inter / TILE_SIZE < 0 || (int)y_inter / TILE_SIZE >= height)
 		return (1);
-	if ((int)x_inter / TILE_SIZE < 0 || (int)x_inter / TILE_SIZE >= mlx->win_w
-		/ TILE_SIZE)
+	if ((int)x_inter / TILE_SIZE < 0 || (int)x_inter / TILE_SIZE >= width)
 		return (1);
 	else
 		return (0);

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_x_y.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 12:34:07 by adardour          #+#    #+#             */
-/*   Updated: 2023/08/30 12:39:59 by adardour         ###   ########.fr       */
+/*   Updated: 2023/09/05 15:32:07 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./include/cub.h"
+#include "../include/cub.h"
 
 void	get_player_pos(t_mlx *mlx)
 {
@@ -30,6 +30,7 @@ void	get_player_pos(t_mlx *mlx)
 			{
 				mlx->player.x = j * TILE_SIZE + TILE_SIZE / 2;
 				mlx->player.y = i * TILE_SIZE + TILE_SIZE / 2;
+				mlx->angle = mlx->map[i][j];
 				return ;
 			}
 			j++;

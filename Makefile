@@ -8,9 +8,8 @@ SOURCES =  main.c ./execution/intersection.c ./execution/wall_render.c ./executi
 ./parsing/cub3d.c ./parsing/get_lines.c ./parsing/parse_element.c ./parsing/puts.c ./parsing/parse_map.c ./parsing/fill.c ./parsing/check_map.c ./parsing/complete_map.c \
 ./parsing/check_caracteres.c ./parsing/rows_and_columns.c ./parsing/colors.c  ./parsing/strtrim.c \
 ./handle_files/open.c \
-./drawing.c ./parsing.c ./parsing/get_color.c \
+./drawing.c ./parsing/parsing.c ./parsing/get_color.c ./parsing/put.c ./parsing/get_x_y.c ./parsing/textures.c ./parsing/check_cub.c  \
 ./check/check.c \
-./get_x_y.c
 
 OBJ = $(SOURCES:.c=.o)
 MLX_DIR = mlx
@@ -20,12 +19,10 @@ CFLAGS = -Wall -Wextra -Werror
 all: $(NAME)
 
 $(NAME): $(OBJ) 
-	$(CC) $(OBJ) -lmlx -framework OpenGL -framework AppKit -o $(NAME) 
+	$(CC) ${CFLAGS} $(OBJ) -lmlx -framework OpenGL -framework AppKit -o $(NAME) 
 
-
-
-%.o: %.c ./include/cub.h 
-	$(CC)  -O3 -Imlx -c $< -o $@
+%.o: %.c ./include/cub.h  ./include/parsing.h 
+	$(CC) ${CFLAGS} -O3 -Imlx -c $< -o $@
 
 clean:
 	rm -f $(OBJ) 
