@@ -19,7 +19,7 @@ int	check_digits(char *color)
 	i = 0;
 	while (color[i])
 	{
-		if (color[i] < 40 || color[i] > 57)
+		if (color[i] < 48 || color[i] > 57)
 			return (0);
 		i++;
 	}

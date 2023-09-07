@@ -25,6 +25,7 @@ void	free_data(t_data *data)
 	free(data->floor.r);
 	free(data->floor.g);
 	free(data->floor.b);
+	free(data->start_map);
 	free(data);
 }
 

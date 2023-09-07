@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   check_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 12:09:48 by adardour          #+#    #+#             */
-/*   Updated: 2023/09/01 18:04:51 by adardour         ###   ########.fr       */
+/*   Updated: 2023/09/07 16:33:25 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/parsing.h"
 
-void	check_symbols(char	**represent_map)
+int	check_symbols(char	**represent_map)
 {
 	int	i;
 	int	w;
@@ -25,7 +25,8 @@ void	check_symbols(char	**represent_map)
 	i = 0;
 	while (represent_map[i])
 	{
-		check_characters(represent_map[i], &w, &e, &o);
+		if (!check_characters(represent_map[i], &w, &e, &o))
+			return (0);
 		i++;
 	}
 	if (o > 1 || o == 0)
@@ -33,6 +34,7 @@ void	check_symbols(char	**represent_map)
 		printf("orientation should contain ones\n");
 		exit(1);
 	}
+	return (1);
 }
 
 int	get_index(char *line, int from)

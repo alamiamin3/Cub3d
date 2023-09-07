@@ -6,13 +6,13 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 12:01:11 by adardour          #+#    #+#             */
-/*   Updated: 2023/08/24 13:40:39 by aalami           ###   ########.fr       */
+/*   Updated: 2023/09/07 16:32:35 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./../include/parsing.h"
 
-void	check_characters(char *line, int *w, int *e, int *o)
+int	check_characters(char *line, int *w, int *e, int *o)
 {
 	int	i;
 
@@ -26,7 +26,7 @@ void	check_characters(char *line, int *w, int *e, int *o)
 			&& line[i] != 'E' && line[i] != 'W'))
 			{
 				printf("symbol not valid\n");
-				exit(1);
+				return (0);
 			}
 			else if (line[i] == 'N' || line[i] == 'S' \
 			|| line[i] == 'E' || line[i] == 'W')
@@ -38,4 +38,5 @@ void	check_characters(char *line, int *w, int *e, int *o)
 		}
 		i++;
 	}
+	return (1);
 }

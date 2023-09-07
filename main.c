@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 14:39:08 by aalami            #+#    #+#             */
-/*   Updated: 2023/09/05 12:29:42 by aalami           ###   ########.fr       */
+/*   Updated: 2023/09/07 16:16:42 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,12 @@ void	free_map(t_mlx *mlx)
 {
 	int	i;
 	int	j;
+	int	h;
 
 	i = 0;
 	j = 0;
-	while (i < mlx->win_h / TILE_SIZE)
+	h = get_rows(mlx->map);
+	while (i < h)
 	{
 		free(mlx->map[i]);
 		i++;
@@ -75,7 +77,6 @@ int	ft_exit(t_mlx *mlx)
 	mlx_destroy_window(mlx->mlx_init, mlx->mlx_win);
 	free(mlx);
 	exit (0);
-	return (0);
 }
 void	a()
 {
@@ -86,7 +87,8 @@ int	main(int argc, char **argv)
 	t_data	*data;
 	int		fd;
 	int		reached_map;
-atexit(a);
+
+	atexit(a);
 	if (argc != 2 || !check_cub(argv[1]))
 		return (printf("Usage: ./program_name file_name\n"));
 	reached_map = 0;
@@ -106,6 +108,6 @@ atexit(a);
 		exit (1);
 	}
 	data->init = mlx_init();
-	drawing(data);
+	// drawing(data);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 11:47:40 by adardour          #+#    #+#             */
-/*   Updated: 2023/09/01 18:37:07 by adardour         ###   ########.fr       */
+/*   Updated: 2023/09/07 16:33:33 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef struct s_data
 	t_text		texture;
 	char		**map_represent;
 	void		*init;
+	char		*start_map;
 }				t_data;
 
 typedef struct s_vars
@@ -85,10 +86,10 @@ int				parse_element(t_data *data);
 int				check_spaces(char *line);
 int				fill(int fd, t_data *data, int count, char *start_map);
 int				check_map(char **represent_map);
-void			check_symbols(char **represent_map);
+int				check_symbols(char **represent_map);
 void			complete_the_map(int longest_length, t_data *data);
 int				get_longest_length(char **represent_map);
-void			check_characters(char *line, int *w, int *e, int *o);
+int				check_characters(char *line, int *w, int *e, int *o);
 int				get_columns(char **represent);
 int				get_rows(char **represent);
 unsigned int	get_color(char *r, char *g, char *b);
@@ -105,7 +106,7 @@ void			open_texture(char *n, char *s, char *w, char *e);
 unsigned int	get_color(char *r, char *g, char *b);
 void			check_last_line(char **map_represent, int index_last);
 int				put_data(t_data *data, int fd, int *reached_map);
-int				put_rgb(t_data *data, char *line, char identifier);
-int				put(char *line, t_data *data, char i);
+int				put_rgb(t_data *data, char *line, char *identifier);
+int				put(char *line, t_data *data);
 int				check_cub(char *path);
 #endif

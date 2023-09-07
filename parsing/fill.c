@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fill.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 21:51:47 by adardour          #+#    #+#             */
-/*   Updated: 2023/08/31 12:08:38 by adardour         ###   ########.fr       */
+/*   Updated: 2023/09/07 16:31:03 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	fill(int fd, t_data *data, int count, char *start_map)
 	}
 	if (ft_strchr(data->map_represent[count - 1], '\n'))
 	{
-		printf("error encountered\n");
+		printf("error encountered : ");
 		close(fd);
 		return (0);
 	}
